@@ -1,13 +1,11 @@
 <script lang="ts">
-	import type { JSONObject } from '@sveltejs/kit/types/private';
-
 	import { onMount } from 'svelte';
-
-	let test: string[] = [];
+	import type { PostDetails } from '../interfaces/PostDetails';
+	let Posts: PostDetails[] = [];
 
 	onMount(async function () {
-		const response: Response = await fetch('http://localhost:8080/test');
-		test = await response.json();
+		const response: Response = await fetch('http://localhost:8080/getdata');
+		Posts = await response.json();
 	});
 	let name: string = '';
 	let Title: string = '';
@@ -37,4 +35,12 @@
 		<input bind:value={name} type="text" placeholder="wprowadź nazwe" />
 	</form>
 	<button on:click={HandleOnClick}> Kliknij na mnie </button>
+	<div>
+		{#each Posts as post}
+			<h2>{post.title}</h2>
+			<h3>uzytkownik: {post.username}</h3>
+			<p>Stworzone w: {post.createdat}</p>
+			<p>Wiadomość: {post.message}</p>
+		{/each}
+	</div>
 </ul>

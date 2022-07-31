@@ -12,19 +12,10 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
-
-func databases(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*") // for CORS
-	w.WriteHeader(http.StatusOK)
-	test := []string{}
-	test = append(test, "Nice")
-	test = append(test, "Nie")
-	json.NewEncoder(w).Encode(test)
-}
 
 type PostInformiation struct {
 	Title     string `json:"title"`
@@ -33,7 +24,28 @@ type PostInformiation struct {
 	UserName  string `json:"userName"`
 }
 
-func PostDataToDataBase(client *mongo.Client, ctx context.Context) http.HandlerFunc {
+func GetDataFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*") // for CORS
+		w.WriteHeader(http.StatusOK)
+		cursor, err := col.Find(ctx, bson.M{})
+		if err != nil {
+			fmt.Println("Find errror", err)
+		} else {
+			var PostsData []bson.M
+			if err = cursor.All(ctx, &PostsData); err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(PostsData)
+			fmt.Println("succes", reflect.TypeOf(cursor))
+			json.NewEncoder(w).Encode(PostsData)
+		}
+
+	}
+}
+
+func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -41,9 +53,7 @@ func PostDataToDataBase(client *mongo.Client, ctx context.Context) http.HandlerF
 
 		var PostDetails PostInformiation
 		json.NewDecoder(r.Body).Decode(&PostDetails)
-		col := client.Database("MSTG_STACK").Collection("PostInfos")
 		fmt.Println("Collection Type: ", reflect.TypeOf(col), "/n")
-
 		result, insertErr := col.InsertOne(ctx, PostDetails)
 		if insertErr != nil {
 			fmt.Println("IntertOne Error", insertErr)
@@ -64,12 +74,12 @@ func main() {
 		panic(err)
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 1000*time.Second)
-
+	col := client.Database("MSTG_STACK").Collection("PostInfos")
 	mime.AddExtensionType(".js", "application/javascript")
 	r := mux.NewRouter()
 
-	r.HandleFunc("/homeland", PostDataToDataBase(client, ctx)).Methods("POST")
-	http.Handle("/test", http.HandlerFunc(databases))
+	r.HandleFunc("/homeland", PostDataToDataBase(col, ctx)).Methods("POST")
+	r.HandleFunc("/getdata", GetDataFromDatabase(col, ctx)).Methods("GET")
 	http.Handle("/", http.FileServer(http.Dir("static")))
 	log.Fatal(http.ListenAndServe(":8080", handlers.CORS()(r)))
 }
