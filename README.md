@@ -1,7 +1,6 @@
 # MSTG-stack-test
 
 I know the name of this stack does not sound very appeling but i think it will be very interesting to build something in it !
-I know the name of this stack does not sound very appealing but i think it will be very interesting to build something in it !
 this tech stack contains:
 
 - S - SvelteKit (for rendering frontEnd)
