@@ -1,8 +1,7 @@
 import { writable } from "svelte/store";
-const PostStore= writable([{
+export const PostStore = writable([{
     title: "",
     username: "",
     createdat: "", 
     message: "",
 }])
-export default PostStore

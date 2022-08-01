@@ -73,7 +73,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	ctx, _ := context.WithTimeout(context.Background(), 1000*time.Second)
+	ctx, _ := context.WithTimeout(context.Background(), 10000*time.Second)
 	col := client.Database("MSTG_STACK").Collection("PostInfos")
 	mime.AddExtensionType(".js", "application/javascript")
 	r := mux.NewRouter()
