@@ -1,6 +1,7 @@
 package main
 
 import (
+	"BackendGo/pkg/controllers"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -78,8 +79,10 @@ func main() {
 	mime.AddExtensionType(".js", "application/javascript")
 	r := mux.NewRouter()
 
+	fmt.Println(controllers.SayHello())
+
 	r.HandleFunc("/homeland", PostDataToDataBase(col, ctx)).Methods("POST")
 	r.HandleFunc("/getdata", GetDataFromDatabase(col, ctx)).Methods("GET")
 	http.Handle("/", http.FileServer(http.Dir("static")))
-	log.Fatal(http.ListenAndServe(":8080", handlers.CORS()(r)))
+	log.Fatal(http.ListenAndServe(":8081", handlers.CORS()(r)))
 }

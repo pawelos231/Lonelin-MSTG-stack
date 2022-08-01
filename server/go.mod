@@ -1,4 +1,4 @@
-module example/project
+module BackendGo
 
 go 1.18
 
