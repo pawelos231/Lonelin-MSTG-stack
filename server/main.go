@@ -25,6 +25,8 @@ type PostInformiation struct {
 	UserName  string `json:"userName"`
 }
 
+//Later move all of those functions to cotrollers
+
 func GetDataFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -68,6 +70,24 @@ func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.Handler
 	}
 }
 
+func UpdatePostFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusOK)
+		/*TODO: write some update post functionality when frontend is ready*/
+	}
+}
+
+func GetPostByUniqueId(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.WriteHeader(http.StatusOK)
+		/*TODO: write some update post functionality when frontend is ready*/
+	}
+}
+
 func main() {
 	//conmect to database
 	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
@@ -84,5 +104,5 @@ func main() {
 	r.HandleFunc("/homeland", PostDataToDataBase(col, ctx)).Methods("POST")
 	r.HandleFunc("/getdata", GetDataFromDatabase(col, ctx)).Methods("GET")
 	http.Handle("/", http.FileServer(http.Dir("static")))
-	log.Fatal(http.ListenAndServe(":8081", handlers.CORS()(r)))
+	log.Fatal(http.ListenAndServe(":8080", handlers.CORS()(r)))
 }

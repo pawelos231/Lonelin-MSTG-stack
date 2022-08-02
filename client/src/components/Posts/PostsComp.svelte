@@ -2,6 +2,7 @@
 	import type { PostDetails } from '../../interfaces/PostDetails';
 	import { PostStore } from '../../store/PostStore';
 	import { onMount } from 'svelte';
+	import Post from './Post/Post.svelte';
 	let Posts: PostDetails[] = [];
 	onMount(async function () {
 		const response: Response = await fetch('http://localhost:8080/getdata');
@@ -52,12 +53,7 @@
 		{/if}
 		<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
 			{#each Posts as post}
-				<div class="basis-1/4 bg-slate-300 rounded">
-					<h2 class="font-bold text-3xl text-center">{post.title}</h2>
-					<h3>Dodane przez: <span class="font-bold">{post.username}</span></h3>
-					<p>Stworzone w: <span class="font-bold">{post.createdat}</span></p>
-					<p>Wiadomość: <span class="font-bold">{post.message}</span></p>
-				</div>
+				<Post {post} />
 			{/each}
 		</div>
 	</div>
