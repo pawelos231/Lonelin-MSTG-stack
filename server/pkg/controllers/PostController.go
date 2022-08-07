@@ -103,3 +103,13 @@ func UpdatePostFromDatabase(col *mongo.Collection, ctx context.Context) http.Han
 		/*TODO: write some update post functionality when frontend is ready*/
 	}
 }
+func DeletePostFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == http.MethodDelete {
+			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.WriteHeader(http.StatusOK)
+			/*TODO: write some update post functionality when frontend is ready*/
+		}
+	}
+}
