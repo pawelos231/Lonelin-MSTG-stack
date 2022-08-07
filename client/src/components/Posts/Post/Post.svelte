@@ -1,11 +1,19 @@
 <script lang="ts">
 	import type { PostDetails } from '../../../interfaces/PostDetails';
+	import { Card, CardText } from 'svelte-materialify';
 	export let post: PostDetails;
 </script>
 
-<div class="basis-1/4 bg-slate-300 rounded">
-	<h2 class="font-bold text-3xl text-center">{post.title}</h2>
-	<h3>Dodane przez: <span class="font-bold">{post.username}</span></h3>
-	<p>Stworzone w: <span class="font-bold">{post.createdat}</span></p>
-	<p>Wiadomość: <span class="font-bold">{post.message}</span></p>
-</div>
+<Card hover outlined style="max-width:300px;">
+	<a href="/posts/{post.title}">
+		<div class="basis-1/4 bg-slate-300 rounded p-3">
+			<h2 class="font-bold text-3xl text-center mb-3 p-6">{post.title}</h2>
+			<h2 class="text-overline">Dodane przez: <span class="font-bold">{post.username}</span></h2>
+			<p class="text-overline">Stworzone w: <span>{post.createdat}</span></p>
+			<CardText>
+				Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit, qui quaerat rerum
+				incidunt nisi ducimus?
+			</CardText>
+		</div>
+	</a>
+</Card>
