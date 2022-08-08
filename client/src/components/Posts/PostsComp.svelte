@@ -11,8 +11,7 @@
 		function delay(time: number) {
 			return new Promise((resolve) => setTimeout(resolve, time));
 		}
-
-		await delay(10000).then(() => console.log('ran after 1 second1 passed'));
+		//delay function to check if laoding state works
 		PostStore.subscribe(async (data) => {
 			data = await response.json();
 			console.log(data);

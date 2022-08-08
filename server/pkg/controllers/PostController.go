@@ -9,6 +9,7 @@ import (
 	"reflect"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -80,17 +81,19 @@ func GetPostByUniqueId(col *mongo.Collection, ctx context.Context) http.HandlerF
 			w.WriteHeader(http.StatusOK)
 
 			queryValue := req.FormValue("q")
+			println(queryValue)
+			objID, _ := primitive.ObjectIDFromHex(queryValue)
 			_, err := col.Find(ctx, bson.M{})
 			if err != nil {
 				fmt.Println("Find errror", err)
 			} else {
 				var SinglePost bson.M
-				if err = col.FindOne(ctx, bson.M{"title": queryValue}).Decode(&SinglePost); err != nil {
-					log.Fatal(err)
+				value := col.FindOne(ctx, bson.M{"_id": objID}).Decode(&SinglePost)
+				if err != nil {
+					log.Fatal("Something went wrong", err, " ", value)
 				}
 				json.NewEncoder(w).Encode(SinglePost)
 			}
-			println(queryValue)
 		}
 	}
 }

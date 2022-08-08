@@ -16,7 +16,7 @@
 		return {
 			status: response.status,
 			props: {
-				article: response.ok && (await response.json())
+				article: await response.json()
 			}
 		};
 	}
