@@ -27,4 +27,5 @@
 	console.log(article);
 </script>
 
-<button> Kliknij na mnie </button>
+<h1 class="flex justify-center text-5xl m-8">{article.title}</h1>
+<img src={article.image} alt={article.title} />

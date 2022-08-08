@@ -16,6 +16,7 @@ import (
 type PostInformiation struct {
 	Title     string `json:"title"`
 	CreatedAt string `json:"createdAt"`
+	Image     string `json:"image"`
 	Message   string `json:"message"`
 	UserName  string `json:"userName"`
 }
@@ -34,7 +35,6 @@ func GetDataFromDatabase(col *mongo.Collection, ctx context.Context) http.Handle
 				if err = cursor.All(ctx, &PostsData); err != nil {
 					log.Fatal(err)
 				}
-				fmt.Println(PostsData)
 				fmt.Println("succes", reflect.TypeOf(cursor))
 				json.NewEncoder(w).Encode(PostsData)
 			}

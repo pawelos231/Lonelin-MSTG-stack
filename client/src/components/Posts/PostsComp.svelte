@@ -5,7 +5,7 @@
 	import Post from './Post/Post.svelte';
 	import { POST } from '../../constants/FetchDataMethods';
 	import { ProgressCircular, MaterialApp } from 'svelte-materialify';
-	let Posts: PostDetails[] = [];
+	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
 		const response: Response = await fetch('http://localhost:8080/getdata');
 		function delay(time: number) {
@@ -21,20 +21,24 @@
 	let name: string = '';
 	let Title: string = '';
 	let Message: string = '';
+	let image: any;
 
 	const ResetValuesOfForm = () => {
 		name = '';
 		Title = '';
 		Message = '';
+		image = null;
 	};
 	const HandleOnClick = async () => {
 		if (name == '' || Title == '' || Message == '') {
+			console.log('coś nie jest nie tak ');
 			return;
 		}
 		const obj: PostDetails = {
 			title: Title,
 			createdat: '22002',
 			message: Message,
+			image: image,
 			username: name
 		};
 		await fetch('http://localhost:8080/PostAPost', {
@@ -42,7 +46,17 @@
 			body: JSON.stringify(obj)
 		});
 		Posts = [...Posts, obj];
+		console.log(Posts);
 		ResetValuesOfForm();
+	};
+	const onFileSelected = (e: any) => {
+		let ImageFromSelect = e.target.files[0];
+		let reader: FileReader = new FileReader();
+		reader.readAsDataURL(ImageFromSelect);
+		reader.onload = (e: any) => {
+			image = e.target?.result;
+			console.log(image);
+		};
 	};
 </script>
 
@@ -52,6 +66,7 @@
 			<input class="border-4" bind:value={Title} type="text" placeholder="wprowadz tytuł" />
 			<input class="border-4" bind:value={Message} type="text" placeholder="wprowadz message" />
 			<input class="border-4" bind:value={name} type="text" placeholder="wprowadź nazwe" />
+			<input type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} />
 		</form>
 		<button
 			class="bg-slate-300 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white"
