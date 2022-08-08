@@ -16,12 +16,15 @@ import (
 
 func main() {
 	//conmect to database
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI("mongodb://localhost:27017"))
+	const MONGOURL = "mongodb://localhost:27017"
+	const DATABASE_NAME = "MSTG_STACK"
+	const COLLECTION_POSTS = "PostInfos"
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(MONGOURL))
 	if err != nil {
 		panic(err)
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 10000*time.Second)
-	col := client.Database("MSTG_STACK").Collection("PostInfos")
+	col := client.Database(DATABASE_NAME).Collection(COLLECTION_POSTS)
 	mime.AddExtensionType(".js", "application/javascript")
 	r := mux.NewRouter()
 

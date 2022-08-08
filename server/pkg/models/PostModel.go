@@ -7,6 +7,7 @@ func SayHello() string {
 type PostInformiation struct {
 	Title     string `json:"title"`
 	CreatedAt string `json:"createdAt"`
+	Image     string `json:"image"`
 	Message   string `json:"message"`
 	UserName  string `json:"userName"`
 }
