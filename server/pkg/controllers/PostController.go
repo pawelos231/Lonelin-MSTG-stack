@@ -94,6 +94,8 @@ func GetPostByUniqueId(col *mongo.Collection, ctx context.Context) http.HandlerF
 				}
 				json.NewEncoder(w).Encode(SinglePost)
 			}
+		} else {
+			println("You used a wrong method")
 		}
 	}
 }
