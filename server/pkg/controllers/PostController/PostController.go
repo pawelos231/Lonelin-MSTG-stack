@@ -24,8 +24,6 @@ type PostInformiation struct {
 func GetDataFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		if req.Method == http.MethodGet {
-			w.Header().Set("Content-Type", "application/json")
-			w.Header().Set("Access-Control-Allow-Origin", "*") // for CORS
 			w.WriteHeader(http.StatusOK)
 			cursor, err := col.Find(ctx, bson.M{})
 			if err != nil {
@@ -49,8 +47,6 @@ func GetDataFromDatabase(col *mongo.Collection, ctx context.Context) http.Handle
 func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		if req.Method == http.MethodPost {
-			w.Header().Set("Content-Type", "application/json")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.WriteHeader(http.StatusOK)
 
 			var PostDetails PostInformiation
@@ -76,8 +72,6 @@ func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.Handler
 func GetPostByUniqueId(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		if req.Method == http.MethodGet {
-			w.Header().Set("Content-Type", "application/json")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.WriteHeader(http.StatusOK)
 
 			queryValue := req.FormValue("q")
@@ -102,8 +96,6 @@ func GetPostByUniqueId(col *mongo.Collection, ctx context.Context) http.HandlerF
 
 func UpdatePostFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.WriteHeader(http.StatusOK)
 		/*TODO: write some update post functionality when frontend is ready*/
 	}
@@ -111,8 +103,6 @@ func UpdatePostFromDatabase(col *mongo.Collection, ctx context.Context) http.Han
 func DeletePostFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		if req.Method == http.MethodDelete {
-			w.Header().Set("Content-Type", "application/json")
-			w.Header().Set("Access-Control-Allow-Origin", "*")
 			w.WriteHeader(http.StatusOK)
 			/*TODO: write some update post functionality when frontend is ready*/
 		}
