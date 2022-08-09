@@ -1,4 +1,4 @@
-package controllers
+package PostControllers
 
 import (
 	"context"
