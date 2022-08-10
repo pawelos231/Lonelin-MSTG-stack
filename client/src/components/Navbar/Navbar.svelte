@@ -4,7 +4,9 @@
 		child:transition duration-150 cursor-pointer 
 		child-hover:text-blue-500 "
 	>
-		<li>siema</li>
+		<li>
+			<a href="/"> Główna </a>
+		</li>
 		<li>siema</li>
 		<li>siema</li>
 		<li>siema</li>

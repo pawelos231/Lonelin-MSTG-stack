@@ -5,6 +5,7 @@
 	import Post from './Post/Post.svelte';
 	import { POST } from '../../constants/FetchDataMethods';
 	import { ProgressCircular, MaterialApp } from 'svelte-materialify';
+	import LoginModal from '../../components/ModalLogin/LoginModal.svelte';
 	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
 		const response: Response = await fetch('http://localhost:8080/getdata');
@@ -22,12 +23,20 @@
 	let Title: string = '';
 	let Message: string = '';
 	let image: any;
+	//dodac tagi, sprawić by kliknięcie na stwórz post to był taki popup,
 
 	const ResetValuesOfForm = () => {
 		name = '';
 		Title = '';
 		Message = '';
 		image = null;
+	};
+
+	//open modal
+	let isModalOpen: boolean = false;
+	console.log(isModalOpen);
+	const SwitchModal = () => {
+		isModalOpen = !isModalOpen;
 	};
 	const HandleOnClick = async () => {
 		if (name == '' || Title == '' || Message == '') {
@@ -55,7 +64,6 @@
 		reader.readAsDataURL(ImageFromSelect);
 		reader.onload = (e: any) => {
 			image = e.target?.result;
-			console.log(image);
 		};
 	};
 </script>
@@ -64,15 +72,21 @@
 	<div>
 		<form class="mb-10 flex flex-col w-1/5 m-4 gap-3">
 			<input class="border-4" bind:value={Title} type="text" placeholder="wprowadz tytuł" />
-			<input class="border-4" bind:value={Message} type="text" placeholder="wprowadz message" />
 			<input class="border-4" bind:value={name} type="text" placeholder="wprowadź nazwe" />
+			<textarea class="border-4" bind:value={Message} type="text" placeholder="wprowadz message" />
 			<input type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} />
 		</form>
+		<div
+			class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
+			on:click={SwitchModal}
+		>
+			Zaloguj się
+		</div>
 		<button
 			class="bg-slate-300 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white"
 			on:click={HandleOnClick}
 		>
-			Kliknij na mnie
+			Stwórz post
 		</button>
 		<h1 class="text-5xl font-bold fa text-center m-9">Posty</h1>
 
@@ -88,3 +102,6 @@
 		</div>
 	</div>
 </div>
+{#if isModalOpen}
+	<LoginModal {SwitchModal} />
+{/if}

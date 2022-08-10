@@ -6,9 +6,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func UserHandlers(r *mux.Router) {
-	r.Use(CommonMiddleware)
-
+func UserHan(r *mux.Router) *mux.Router {
+	r.HandleFunc("/", home)
+	return r
+}
+func home(w http.ResponseWriter, req *http.Request) {
+	w.Write([]byte("hello from API"))
 }
 
 func CommonMiddleware(next http.Handler) http.Handler {
