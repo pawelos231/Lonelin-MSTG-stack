@@ -1,17 +1,20 @@
 package userRoutes
 
 import (
+	consts "BackendGo/pkg/constants"
+	"BackendGo/pkg/controllers/UserController"
+	"context"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func UserHan(r *mux.Router) *mux.Router {
-	r.HandleFunc("/", home)
+func UserHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux.Router {
+	col := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_USERS)
+	r.Use(CommonMiddleware)
+	r.HandleFunc("/createUser", UserController.Register(col, ctx)).Methods("POST")
 	return r
-}
-func home(w http.ResponseWriter, req *http.Request) {
-	w.Write([]byte("hello from API"))
 }
 
 func CommonMiddleware(next http.Handler) http.Handler {

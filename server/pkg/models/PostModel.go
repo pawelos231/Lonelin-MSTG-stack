@@ -12,9 +12,9 @@ type PostInformiation struct {
 	UserName  string `json:"userName"`
 }
 
-type UserLoginInfo struct {
-	Username string `json:"userName"`
-	Email    string `json:"Email"`
-	Image    string `json:"Image"`
+type User struct {
+	Id       uint   `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
 	Password string `json:"Password"`
 }

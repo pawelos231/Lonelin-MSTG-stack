@@ -8,7 +8,9 @@ import (
 	"os"
 	"time"
 
+	consts "BackendGo/pkg/constants"
 	"BackendGo/pkg/routes/PostRoutes"
+	"BackendGo/pkg/routes/userRoutes"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -26,24 +28,18 @@ func main() {
 	}
 
 	//conmect to database
-	const (
-		MONGOURL         = "mongodb://localhost:27017"
-		DATABASE_NAME    = "MSTG_STACK"
-		COLLECTION_POSTS = "PostInfos"
-	)
-	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(MONGOURL))
+
+	client, err := mongo.Connect(context.TODO(), options.Client().ApplyURI(consts.MONGOURL))
 	if err != nil {
 		panic(err)
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 10000*time.Second)
-	col := client.Database(DATABASE_NAME).Collection(COLLECTION_POSTS)
+	col := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_POSTS)
 	mime.AddExtensionType(".js", "application/javascript")
 
 	r := mux.NewRouter()
-
-	//TODO combine routes
-
-	http.Handle("/", PostRoutes.PostsHandlers(r, col, ctx))
+	http.Handle("/api", userRoutes.UserHandlers(r, ctx, client))
+	http.Handle("/post", PostRoutes.PostsHandlers(r, col, ctx))
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), handlers.CORS()(r)))
 }
