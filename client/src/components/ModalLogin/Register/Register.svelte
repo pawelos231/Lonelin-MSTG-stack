@@ -12,7 +12,9 @@
 		await fetch('http://localhost:8080/createUser', {
 			method: POST,
 			body: JSON.stringify(obj)
-		});
+		})
+			.then((response) => response.json())
+			.then((data) => console.log(data));
 	};
 </script>
 
