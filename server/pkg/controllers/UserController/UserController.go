@@ -59,27 +59,37 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			if Error != nil {
 				result, insertErr := col.InsertOne(ctx, user)
 				RegisterErrors(result, insertErr)
-				println(User)
+				expirationTime := time.Now().Add(time.Hour * 24)
 				tkToHash := &models.Token{
 					Name:  user.Name,
 					Email: user.Email,
 					StandardClaims: &jwt.StandardClaims{
-						ExpiresAt: time.Now().Add(time.Minute * 100000).Unix(),
+						ExpiresAt: expirationTime.Unix(),
 					},
 				}
 
 				token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tkToHash)
-				println(token)
-				LoginSuccesInfo := &LoginIfno{Text: "udało się utworzyć konto", Status: 1}
+				tokenString, err := token.SignedString([]byte("secret"))
+				if err != nil {
+					println(err)
+				}
 
-				//Later send here token
+				var UserInfo = map[string]interface{}{}
+				UserInfo["token"] = tokenString
+				UserInfo["email"] = user.Email
+				UserInfo["name"] = user.Name
 
-				json.NewEncoder(w).Encode(&LoginSuccesInfo)
+				var reponse = map[string]interface{}{"UserInfo": UserInfo}
+				reponse["text"] = "Udało się zalogować !"
+				reponse["status"] = 1
+
+				json.NewEncoder(w).Encode(reponse)
 
 			} else {
 				println(User, Error, "udało się znaleźć innego uzytkoniwka o tym mailu")
-				ErrorInfo := &LoginIfno{Text: "Podany email juz istnieje w bazie danych", Status: 0}
-				json.NewEncoder(w).Encode(&ErrorInfo)
+				var resp = map[string]interface{}{"status": false, "text": "Podany uzytkownik juz istnieje w bazie"}
+				resp["status"] = 0
+				json.NewEncoder(w).Encode(resp)
 			}
 
 		}

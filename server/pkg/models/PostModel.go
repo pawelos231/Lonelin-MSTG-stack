@@ -12,6 +12,8 @@ type PostInformiation struct {
 
 //later add more things like: gender, createdPosts, liked comments, some kind of points etc.
 //if this file becomes too big, move it to different smaller files
+
+//later add role
 type User struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
@@ -32,7 +34,7 @@ type Comment struct {
 
 //Token struct declaration
 type Token struct {
-	Name   string
-	Email  string
+	Name  string
+	Email string
 	*jwt.StandardClaims
 }
