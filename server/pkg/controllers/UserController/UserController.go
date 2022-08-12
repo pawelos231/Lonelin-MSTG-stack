@@ -92,6 +92,24 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 				json.NewEncoder(w).Encode(resp)
 			}
 
+		} else {
+			json.NewEncoder(w).Encode("U used wrong method")
+		}
+	}
+}
+
+func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		if req.Method == http.MethodPost {
+			user := &models.User{}
+			json.NewDecoder(req.Body).Decode(&user)
+			var UserData = &models.User{}
+			Info := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&UserData)
+			if UserData != nil {
+				fmt.Println(UserData.Password)
+			} else {
+				println("nie ma takiego typa", Info)
+			}
 		}
 	}
 }

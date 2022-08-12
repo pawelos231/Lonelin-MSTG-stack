@@ -23,8 +23,11 @@
 	let Title: string = '';
 	let Message: string = '';
 	let image: any;
+	let ProfileObj: object = {};
 	//dodac tagi, sprawić by kliknięcie na stwórz post to był taki popup,
-
+	if (typeof localStorage !== 'undefined') {
+		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
+	}
 	const ResetValuesOfForm = () => {
 		name = '';
 		Title = '';
@@ -35,9 +38,16 @@
 	//open modal
 	let isModalOpen: boolean = false;
 	console.log(isModalOpen);
+
 	const SwitchModal = () => {
 		isModalOpen = !isModalOpen;
 	};
+
+	const LogOut = () => {
+		localStorage.clear();
+		ProfileObj = {};
+	};
+
 	const HandleOnClick = async () => {
 		if (name == '' || Title == '' || Message == '') {
 			console.log('coś nie jest nie tak ');
@@ -76,12 +86,24 @@
 			<textarea class="border-4" bind:value={Message} type="text" placeholder="wprowadz message" />
 			<input type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} />
 		</form>
-		<div
-			class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
-			on:click={SwitchModal}
-		>
-			Zaloguj się
-		</div>
+		{#key ProfileObj}
+			{#if Object.keys(ProfileObj).length === 0}
+				<div
+					class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
+					on:click={SwitchModal}
+				>
+					Zaloguj się
+				</div>
+			{/if}
+			{#if Object.keys(ProfileObj).length !== 0}
+				<div
+					class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
+					on:click={LogOut}
+				>
+					Wyloguj się
+				</div>
+			{/if}
+		{/key}
 		<button
 			class="bg-slate-300 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white"
 			on:click={HandleOnClick}

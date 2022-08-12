@@ -22,10 +22,10 @@
 				.then((data) => {
 					Info = data;
 					if (Info.status == 1) {
-						localStorage.setItem('gowno', JSON.stringify(Info.UserInfo));
+						localStorage.setItem('profile', JSON.stringify(Info.UserInfo));
 					}
 				});
-			const respons: string = JSON.parse(localStorage.getItem('gowno') || '{}');
+			const respons: string = JSON.parse(localStorage.getItem('profile') || '{}');
 			console.log(respons);
 		}
 	};

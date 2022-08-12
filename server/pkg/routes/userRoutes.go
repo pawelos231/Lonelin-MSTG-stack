@@ -14,6 +14,7 @@ func UserHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux
 	col := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_USERS)
 	r.Use(CommonMiddlewareUser)
 	r.HandleFunc("/createUser", UserController.Register(col, ctx)).Methods("POST")
+	r.HandleFunc("/loginUser", UserController.Login(col, ctx)).Methods("POST")
 	return r
 }
 
