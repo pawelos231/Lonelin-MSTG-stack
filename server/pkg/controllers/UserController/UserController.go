@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
@@ -31,33 +33,55 @@ func RegisterErrors(result *mongo.InsertOneResult, insertErr error) {
 
 func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		user := &models.User{}
-		json.NewDecoder(req.Body).Decode(&user)
-		var password, err = bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
-		if err != nil {
-			fmt.Println(err)
-			err := ErrorResponse{
-				Err: "Password Encryption  failed",
+		if req.Method == http.MethodPost {
+			user := &models.User{}
+			json.NewDecoder(req.Body).Decode(&user)
+			var password, err = bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
+			if err != nil {
+				fmt.Println(err)
+				err := ErrorResponse{
+					Err: "Password Encryption  failed",
+				}
+				json.NewEncoder(w).Encode(err)
 			}
-			json.NewEncoder(w).Encode(err)
+
+			dash := string(password)
+			user.Password = dash
+
+			var User bson.M
+			Error := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&User)
+
+			type LoginIfno struct {
+				Text   string `json:"text"`
+				Status int    `json:"status"`
+			}
+
+			if Error != nil {
+				result, insertErr := col.InsertOne(ctx, user)
+				RegisterErrors(result, insertErr)
+				println(User)
+				tkToHash := &models.Token{
+					Name:  user.Name,
+					Email: user.Email,
+					StandardClaims: &jwt.StandardClaims{
+						ExpiresAt: time.Now().Add(time.Minute * 100000).Unix(),
+					},
+				}
+
+				token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tkToHash)
+				println(token)
+				LoginSuccesInfo := &LoginIfno{Text: "udało się utworzyć konto", Status: 1}
+
+				//Later send here token
+
+				json.NewEncoder(w).Encode(&LoginSuccesInfo)
+
+			} else {
+				println(User, Error, "udało się znaleźć innego uzytkoniwka o tym mailu")
+				ErrorInfo := &LoginIfno{Text: "Podany email juz istnieje w bazie danych", Status: 0}
+				json.NewEncoder(w).Encode(&ErrorInfo)
+			}
+
 		}
-
-		dash := string(password)
-		user.Password = dash
-
-		var User bson.M
-		Error := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&User)
-		if Error != nil {
-			result, insertErr := col.InsertOne(ctx, user)
-			RegisterErrors(result, insertErr)
-			println(User)
-			//Later send here token
-			json.NewEncoder(w).Encode("logowanie powiodło się")
-
-		} else {
-			println(User, Error, "chuj")
-			json.NewEncoder(w).Encode("Jest juz w bazie danych ten mail")
-		}
-
 	}
 }

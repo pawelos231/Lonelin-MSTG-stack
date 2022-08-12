@@ -9,8 +9,7 @@ import (
 	"time"
 
 	consts "BackendGo/pkg/constants"
-	"BackendGo/pkg/routes/PostRoutes"
-	"BackendGo/pkg/routes/userRoutes"
+	Routes "BackendGo/pkg/routes"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -38,8 +37,8 @@ func main() {
 	mime.AddExtensionType(".js", "application/javascript")
 
 	r := mux.NewRouter()
-	http.Handle("/api", userRoutes.UserHandlers(r, ctx, client))
-	http.Handle("/post", PostRoutes.PostsHandlers(r, col, ctx))
+	http.Handle("/api", Routes.UserHandlers(r, ctx, client))
+	http.Handle("/post", Routes.PostsHandlers(r, col, ctx))
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), handlers.CORS()(r)))
 }

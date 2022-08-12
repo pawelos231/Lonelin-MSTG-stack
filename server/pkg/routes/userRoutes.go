@@ -1,4 +1,4 @@
-package userRoutes
+package Routes
 
 import (
 	consts "BackendGo/pkg/constants"
@@ -12,12 +12,12 @@ import (
 
 func UserHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux.Router {
 	col := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_USERS)
-	r.Use(CommonMiddleware)
+	r.Use(CommonMiddlewareUser)
 	r.HandleFunc("/createUser", UserController.Register(col, ctx)).Methods("POST")
 	return r
 }
 
-func CommonMiddleware(next http.Handler) http.Handler {
+func CommonMiddlewareUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Add("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")

@@ -1,4 +1,4 @@
-package PostRoutes
+package Routes
 
 import (
 	PostControllers "BackendGo/pkg/controllers/PostController"

@@ -5,3 +5,8 @@ export interface PostDetails {
     createdat: string, 
     message: string,
 }
+
+export interface StatusLogin {
+    text: string,
+    status : number,
+}

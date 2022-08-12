@@ -3,6 +3,8 @@
 	let email: string = '';
 	let password: string = '';
 	import { POST } from '../../../constants/FetchDataMethods';
+	import type { StatusLogin } from '../../../interfaces/PostDetails';
+	let Info: StatusLogin;
 	const SendUserData = async () => {
 		const obj: object = {
 			name,
@@ -14,10 +16,18 @@
 			body: JSON.stringify(obj)
 		})
 			.then((response) => response.json())
-			.then((data) => console.log(data));
+			.then((data) => console.log((Info = data)));
 	};
 </script>
 
+{#if Info}
+	{#if Info.status === 1}
+		<p class="text-green-900">{Info.text}</p>
+	{/if}
+	{#if Info.status === 0}
+		<p class="text-red-900">{Info.text}</p>
+	{/if}
+{/if}
 <form class="bg-slate-300 p-5 m-5 rounded flex flex-col gap-4">
 	<input
 		bind:value={name}
