@@ -106,10 +106,39 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			var UserData = &models.User{}
 			Info := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&UserData)
 			if UserData != nil {
-				fmt.Println(UserData.Password)
+				errorPass := bcrypt.CompareHashAndPassword([]byte(UserData.Password), []byte(user.Password))
+				if errorPass != nil && errorPass == bcrypt.ErrMismatchedHashAndPassword {
+					println("niepoprawne Hasło")
+					json.NewEncoder(w).Encode("Niepoprawne hasło")
+				} else {
+					expirationTime := time.Now().Add(time.Hour * 24)
+					tkToHash := &models.Token{
+						Name:  user.Name,
+						Email: user.Email,
+						StandardClaims: &jwt.StandardClaims{
+							ExpiresAt: expirationTime.Unix(),
+						},
+					}
+					token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tkToHash)
+					tokenString, err := token.SignedString([]byte("secret"))
+					if err != nil {
+						println(err)
+					}
+					var UserInfo = map[string]interface{}{}
+					UserInfo["token"] = tokenString
+					UserInfo["email"] = UserData.Email
+					UserInfo["name"] = UserData.Name
+					var reponse = map[string]interface{}{"UserInfo": UserInfo}
+					reponse["MessageLog"] = "Udało się zalogować !"
+					reponse["status"] = 1
+					json.NewEncoder(w).Encode(reponse)
+
+				}
 			} else {
 				println("nie ma takiego typa", Info)
 			}
+		} else {
+			json.NewEncoder(w).Encode("U used wrong method")
 		}
 	}
 }

@@ -2,6 +2,7 @@
 	let email: string = '';
 	let password: string = '';
 	let name: string = '';
+	import { POST } from '../../../constants/FetchDataMethods';
 	const Login = async () => {
 		if (email != '' && password != '') {
 			let ObjectLogin: object = {
@@ -10,7 +11,7 @@
 				password
 			};
 			await fetch('http://localhost:8080/loginUser', {
-				method: 'POST',
+				method: POST,
 				body: JSON.stringify(ObjectLogin)
 			})
 				.then((response) => response.json())
