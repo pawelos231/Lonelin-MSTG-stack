@@ -4,7 +4,7 @@
 	let password: string = '';
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
-	import type { StatusLogin, UserLoginInfo } from '../interfaces/PostDetails';
+	import type { StatusLogin, UserLoginInfo } from '../interfaces/UserInfoLogin';
 	let Info: StatusLogin;
 	const SendUserData = async (e: any) => {
 		e.preventDefault();

@@ -4,7 +4,7 @@
 	let name: string = '';
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
-	import type { ErrorMessage } from '../interfaces/PostDetails';
+	import type { ErrorMessage } from '../interfaces/UserInfoLogin';
 	let ErrorMess: ErrorMessage;
 	const Login = async (e: any) => {
 		e.preventDefault();
