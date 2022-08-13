@@ -5,7 +5,6 @@
 	import Post from './Post/Post.svelte';
 	import { POST } from '../../constants/FetchDataMethods';
 	import { ProgressCircular, MaterialApp } from 'svelte-materialify';
-	import LoginModal from '../../components/ModalLogin/LoginModal.svelte';
 	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
 		const response: Response = await fetch('http://localhost:8080/getdata');
@@ -38,10 +37,6 @@
 	//open modal
 	let isModalOpen: boolean = false;
 	console.log(isModalOpen);
-
-	const SwitchModal = () => {
-		isModalOpen = !isModalOpen;
-	};
 
 	const LogOut = () => {
 		localStorage.clear();
@@ -90,9 +85,8 @@
 			{#if Object.keys(ProfileObj).length === 0}
 				<div
 					class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
-					on:click={SwitchModal}
 				>
-					Zaloguj się
+					<a href="/register"> Zaloguj się </a>
 				</div>
 			{/if}
 			{#if Object.keys(ProfileObj).length !== 0}
@@ -124,6 +118,3 @@
 		</div>
 	</div>
 </div>
-{#if isModalOpen}
-	<LoginModal {SwitchModal} />
-{/if}

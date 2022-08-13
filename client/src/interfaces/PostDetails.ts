@@ -11,6 +11,10 @@ export interface UserInfo {
     name: string
     token: string
 }
+export interface ErrorMessage  {
+    text: string
+    status: number
+}
 
 export interface StatusLogin {
     UserInfo: UserInfo

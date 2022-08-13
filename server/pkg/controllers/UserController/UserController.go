@@ -108,8 +108,10 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			if UserData != nil {
 				errorPass := bcrypt.CompareHashAndPassword([]byte(UserData.Password), []byte(user.Password))
 				if errorPass != nil && errorPass == bcrypt.ErrMismatchedHashAndPassword {
-					println("niepoprawne Hasło")
-					json.NewEncoder(w).Encode("Niepoprawne hasło")
+					var ErrorInfo = map[string]interface{}{}
+					ErrorInfo["status"] = 0
+					ErrorInfo["text"] = "Niepoprawne Hasło"
+					json.NewEncoder(w).Encode(ErrorInfo)
 				} else {
 					expirationTime := time.Now().Add(time.Hour * 24)
 					tkToHash := &models.Token{
@@ -129,7 +131,7 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 					UserInfo["email"] = UserData.Email
 					UserInfo["name"] = UserData.Name
 					var reponse = map[string]interface{}{"UserInfo": UserInfo}
-					reponse["MessageLog"] = "Udało się zalogować !"
+					reponse["text"] = "Udało się zalogować !"
 					reponse["status"] = 1
 					json.NewEncoder(w).Encode(reponse)
 
