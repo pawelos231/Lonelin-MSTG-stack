@@ -8,7 +8,6 @@
 	let Info: StatusLogin;
 	const SendUserData = async (e: any) => {
 		e.preventDefault();
-		console.log('chuj');
 		if (name != '' && email != '' && password != '') {
 			localStorage.clear();
 			const obj: UserLoginInfo = {
