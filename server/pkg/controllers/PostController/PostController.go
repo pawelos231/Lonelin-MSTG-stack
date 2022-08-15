@@ -48,7 +48,19 @@ func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.Handler
 	return func(w http.ResponseWriter, req *http.Request) {
 		if req.Method == http.MethodPost {
 			w.WriteHeader(http.StatusOK)
-
+			/*
+				req.ParseMultipartForm(10 << 20)
+				file, handler, err := req.FormFile("PostFile")
+				if err != nil {
+					fmt.Println("Error retrieving file")
+					fmt.Println(err)
+					return
+				}
+				defer file.Close()
+				fmt.Printf("Upload fILE: %+v\n", handler.Filename)
+				fmt.Printf("Upload fILE: %+v\n", handler.Size)
+				fmt.Printf("Upload fILE: %+v\n", handler.Header)
+			*/
 			var PostDetails PostInformiation
 			json.NewDecoder(req.Body).Decode(&PostDetails)
 			fmt.Println("Collection Type: ", reflect.TypeOf(col), "/n")

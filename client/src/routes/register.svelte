@@ -5,6 +5,13 @@
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
 	import type { StatusLogin, UserLoginInfo } from '../interfaces/UserInfoLogin';
+	import { onMount } from 'svelte';
+	import { createScene } from '../scene';
+	let el: any;
+
+	onMount(() => {
+		createScene(el);
+	});
 	let Info: StatusLogin;
 	const SendUserData = async (e: any) => {
 		e.preventDefault();
@@ -52,9 +59,10 @@
 		</p>
 	{/if}
 {/if}
-<div class="flex flex-col items-center justify-center h-screen">
+<div class="flex flex-col items-center justify-center h-screen overflow-hidden">
+	<canvas class="siema" bind:this={el} />
 	<form
-		class="bg-slate-300 p-5 m-5 rounded flex flex-col gap-4 w-1/5 items-center"
+		class="bg-white opacity-90 h-1/3 p-5 m-5 rounded flex flex-col gap-4 w-1/5 items-center absolute"
 		on:submit={(e) => SendUserData(e)}
 	>
 		<input
@@ -62,21 +70,21 @@
 			type="text"
 			required
 			placeholder="wprowadz nazwę"
-			class=" w-4/5 bg-white p-2 rounded-lg transition duration-150 ease-linear hover:bg-black hover:text-white"
+			class=" w-4/5 bg-white p-2  transition duration-150 ease-linear hover:bg-black hover:text-white border-2 rounded-none"
 		/>
 		<input
 			bind:value={email}
 			type="email"
 			required
 			placeholder="wprowadz maila"
-			class=" w-4/5 bg-white p-2 transition duration-150 ease-linear rounded-lg hover:bg-black hover:text-white"
+			class=" w-4/5 bg-white p-2 transition duration-150 ease-linear  hover:bg-black hover:text-white border-2 rounded-none"
 		/>
 		<input
 			bind:value={password}
 			type="password"
 			required
 			placeholder="wprowadz hasło"
-			class=" w-4/5 bg-white p-2 transition duration-150 ease-linear rounded-lg hover:bg-black hover:text-white"
+			class=" w-4/5 bg-white p-2 transition duration-150 ease-linear  hover:bg-black hover:text-white border-2 rounded-none"
 		/>
 		<button
 			type="submit"
@@ -84,7 +92,7 @@
 			>Register</button
 		>
 	</form>
-	<div>
+	<div class="absolute mt-96 text-white">
 		<a href="/login"> I want to login </a>
 	</div>
 </div>

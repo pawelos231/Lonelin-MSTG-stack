@@ -5,6 +5,13 @@
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
 	import type { ErrorMessage } from '../interfaces/UserInfoLogin';
+	import { onMount } from 'svelte';
+	import { createScene } from '../scene';
+	let el: any;
+
+	onMount(() => {
+		createScene(el);
+	});
 	let ErrorMess: ErrorMessage;
 	const Login = async (e: any) => {
 		e.preventDefault();
@@ -24,7 +31,8 @@
 	};
 </script>
 
-<div class="flex flex-col items-center justify-center h-screen">
+<div class="flex flex-col items-center justify-center h-screen overflow-hidden">
+	<canvas class="siema" bind:this={el} />
 	{#if ErrorMess}
 		<p
 			in:fly={{ y: -800, duration: 130, delay: 50 }}
@@ -34,7 +42,10 @@
 			{ErrorMess.text}
 		</p>
 	{/if}
-	<form class="bg-slate-300 p-5 m-5 rounded flex flex-col gap-4 w-1/5" on:submit={(e) => Login(e)}>
+	<form
+		class="bg-slate-300 p-5 m-5 rounded flex flex-col gap-4 w-1/5 absolute"
+		on:submit={(e) => Login(e)}
+	>
 		<input
 			bind:value={email}
 			type="text"
@@ -53,7 +64,7 @@
 			>Login</button
 		>
 	</form>
-	<div>
-		<a href="/register"> I want to register ! </a>
+	<div class="absolute mt-96 text-white">
+		<a href="/register"> I want to register </a>
 	</div>
 </div>

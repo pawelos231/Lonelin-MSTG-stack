@@ -105,7 +105,8 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			json.NewDecoder(req.Body).Decode(&user)
 			var UserData = &models.User{}
 			Info := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&UserData)
-			if UserData != nil {
+			fmt.Println(Info)
+			if Info == nil {
 				errorPass := bcrypt.CompareHashAndPassword([]byte(UserData.Password), []byte(user.Password))
 				if errorPass != nil && errorPass == bcrypt.ErrMismatchedHashAndPassword {
 					var ErrorInfo = map[string]interface{}{}
@@ -137,7 +138,11 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 
 				}
 			} else {
-				println("nie ma takiego typa", Info)
+				fmt.Println("nie ma takiego typa", Info)
+				var ErrorInfo = map[string]interface{}{}
+				ErrorInfo["status"] = 0
+				ErrorInfo["text"] = "Nie ma takiego chłopa w bazie danych"
+				json.NewEncoder(w).Encode(ErrorInfo)
 			}
 		} else {
 			json.NewEncoder(w).Encode("U used wrong method")

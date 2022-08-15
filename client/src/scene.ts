@@ -54,7 +54,7 @@ export const createScene = (el: any) => {
 	}
 	var arrOfParticles: itemsParticles[] = [];
 
-	Array(1350)
+	Array(1250)
 	  .fill()
 	  .forEach((item: itemsParticles) => {
 		arrOfParticles.push(addParticle());
@@ -107,8 +107,8 @@ export const createScene = (el: any) => {
 	  0.85
 	);
 	bloomPass.threshold = 0.5;
-	bloomPass.strength = 3; //intensity of glow
-	bloomPass.radius = 0.5;
+	bloomPass.strength = 2.3; //intensity of glow
+	bloomPass.radius = 1.5;
 	const bloomComposer: any = new EffectComposer(renderer);
 	bloomComposer.setSize(window.innerWidth, window.innerHeight);
 	bloomComposer.renderToScreen = true;
@@ -126,8 +126,8 @@ export const createScene = (el: any) => {
 	  arrOfParticles.forEach((item: itemsParticles, i: number) => {
 		item.Particle.position.z = item.Particle.position.z + 0.1055;
 		item.material.emissive.r = 1 * Math.abs(item.Particle.position.z);
-		item.material.emissive.g = 3.86 * Math.abs(1 / item.Particle.position.z);
-		item.material.emissive.b = 3.86 * Math.abs(1 / item.Particle.position.z);
+		item.material.emissive.g = 3.92 * Math.abs(1 / item.Particle.position.z);
+		item.material.emissive.b = 3.92 * Math.abs(1 / item.Particle.position.z);
 
 		if (item.Particle.position.z > 1.5) {
 		  item.Particle.geometry.dispose();

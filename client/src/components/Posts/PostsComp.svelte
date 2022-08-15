@@ -43,7 +43,8 @@
 		ProfileObj = {};
 	};
 
-	const HandleOnClick = async () => {
+	const HandleOnClick = async (e: any) => {
+		e.preventDefault();
 		if (name == '' || Title == '' || Message == '') {
 			console.log('coś nie jest nie tak ');
 			return;
@@ -64,7 +65,7 @@
 		ResetValuesOfForm();
 	};
 	const onFileSelected = (e: any) => {
-		let ImageFromSelect = e.target.files[0];
+		let ImageFromSelect: any = e.target.files[0];
 		let reader: FileReader = new FileReader();
 		reader.readAsDataURL(ImageFromSelect);
 		reader.onload = (e: any) => {
@@ -75,11 +76,27 @@
 
 <div class="mb-8">
 	<div>
-		<form class="mb-10 flex flex-col w-1/5 m-4 gap-3">
+		<form
+			on:submit={(e) => HandleOnClick(e)}
+			enctype="multipart/form-data"
+			method="post"
+			class="mb-10 flex flex-col w-1/5 m-4 gap-3"
+		>
 			<input class="border-4" bind:value={Title} type="text" placeholder="wprowadz tytuł" />
 			<input class="border-4" bind:value={name} type="text" placeholder="wprowadź nazwe" />
 			<textarea class="border-4" bind:value={Message} type="text" placeholder="wprowadz message" />
-			<input type="file" accept=".jpg, .jpeg, .png" on:change={(e) => onFileSelected(e)} />
+			<input
+				name="PostFile"
+				type="file"
+				accept=".jpg, .jpeg, .png"
+				on:change={(e) => onFileSelected(e)}
+			/>
+			<button
+				class="bg-slate-300 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white"
+				type="submit"
+			>
+				Stwórz post
+			</button>
 		</form>
 		{#key ProfileObj}
 			{#if Object.keys(ProfileObj).length === 0}
@@ -98,12 +115,6 @@
 				</div>
 			{/if}
 		{/key}
-		<button
-			class="bg-slate-300 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white"
-			on:click={HandleOnClick}
-		>
-			Stwórz post
-		</button>
 		<h1 class="text-5xl font-bold fa text-center m-9">Posty</h1>
 
 		{#if Posts.length === 0}
