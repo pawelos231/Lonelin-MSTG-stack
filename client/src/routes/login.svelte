@@ -1,10 +1,11 @@
 <script lang="ts">
+	import Input from '../components/addons/Input.svelte';
+
 	let email: string = '';
 	let password: string = '';
 	let name: string = '';
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
-	import type { ErrorMessage } from '../interfaces/UserInfoLogin';
 	import { onMount } from 'svelte';
 	import { createScene } from '../scene';
 	let el: any;
@@ -12,8 +13,9 @@
 	onMount(() => {
 		createScene(el);
 	});
-	let ErrorMess: ErrorMessage;
-	export const Login = async (e: any) => {
+	let SessionData: any;
+	export async function Login(e: any) {
+		localStorage.clear();
 		e.preventDefault();
 		if (email != '' && password != '') {
 			let ObjectLogin: object = {
@@ -26,59 +28,57 @@
 				body: JSON.stringify(ObjectLogin)
 			})
 				.then((response) => response.json())
-				.then((data) => console.log((ErrorMess = data)));
+				.then((data) => console.log((SessionData = data)));
 		}
-		console.log(ErrorMess);
+		localStorage.setItem('profile', JSON.stringify(SessionData.UserInfo));
+		console.log(SessionData.UserInfo);
+		let ProfileObj: any;
+		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
+		console.log(ProfileObj);
 		return {
-			headers: { Location: '/' },
-			status: 302
+			status: 302,
+			redirect: '/'
 		};
-	};
+	}
 </script>
 
 <div class="flex flex-col items-center justify-center h-screen overflow-hidden">
-	<canvas class="siema" bind:this={el} />
-	{#if ErrorMess}
-		{#if ErrorMess.status == 0}
+	<canvas bind:this={el} />
+
+	{#if SessionData}
+		{#if SessionData.status == 0}
 			<p
 				in:fly={{ y: -800, duration: 130, delay: 50 }}
 				out:fly={{ duration: 100, delay: 50 }}
-				class="absolute -translate-x-1/2 top-24 left-1/2 text-red-900"
+				class=" text-2xl absolute -translate-x-1/2 top-24 left-1/2 text-red-900"
 			>
-				{ErrorMess.text}
+				{SessionData.text}
 			</p>
 		{/if}
-		{#if ErrorMess.status == 1}
+		{#if SessionData.status == 1}
 			<p
 				in:fly={{ y: -800, duration: 130, delay: 50 }}
 				out:fly={{ duration: 100, delay: 50 }}
-				class="absolute -translate-x-1/2 top-24 left-1/2 text-green-900"
+				class="absolute -translate-x-1/2 top-24 left-1/2 text-green-900 text-2xl"
 			>
-				{ErrorMess.text}
+				{SessionData.text}
 			</p>
 		{/if}
 	{/if}
+
 	<form
 		class="bg-slate-300 p-5 m-5 rounded flex flex-col gap-4 w-1/5 absolute"
 		on:submit={(e) => Login(e)}
 	>
-		<input
-			bind:value={email}
-			type="text"
-			placeholder="wprowadz Email"
-			class="bg-white p-2 rounded-lg transition duration-150 ease-linear hover:bg-black hover:text-white"
-		/>
-		<input
-			bind:value={password}
-			type="text"
-			placeholder="wprowadz hasło"
-			class="bg-white p-2 transition duration-150 ease-linear rounded-lg hover:bg-black hover:text-white"
-		/>
+		<Input label="wprowadz maila" bind:value={email} />
+		<Input label="wprowadz hasło" bind:value={password} />
+
 		<button
 			type="submit"
 			class="p-4 bg-black text-white rounded transition ease-linear duration-75 hover:scale-105"
-			>Login</button
 		>
+			Login
+		</button>
 	</form>
 	<div class="absolute mt-96 text-white">
 		<a href="/register"> I want to register </a>

@@ -44,7 +44,7 @@
 		<p
 			in:fly={{ y: -800, duration: 130, delay: 50 }}
 			out:fly={{ duration: 100, delay: 50 }}
-			class="absolute -translate-x-1/2 top-24 left-1/2 text-green-900"
+			class="text-2xl absolute -translate-x-1/2 top-24 left-1/2 text-green-900"
 		>
 			{Info.text}
 		</p>
@@ -53,7 +53,7 @@
 		<p
 			in:fly={{ y: -800, duration: 130, delay: 50 }}
 			out:fly={{ duration: 100, delay: 50 }}
-			class="absolute -translate-x-1/2 top-24 left-1/2 text-red-900"
+			class="text-2xl absolute -translate-x-1/2 top-24 left-1/2 text-red-900"
 		>
 			{Info.text}
 		</p>
