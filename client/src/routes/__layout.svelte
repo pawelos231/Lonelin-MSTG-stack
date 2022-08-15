@@ -16,3 +16,10 @@
 	<slot />
 </main>
 <Footer />
+
+<style>
+	:global(body, *) {
+		margin: 0;
+		padding: 0;
+	}
+</style>

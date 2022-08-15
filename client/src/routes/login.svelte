@@ -13,7 +13,7 @@
 		createScene(el);
 	});
 	let ErrorMess: ErrorMessage;
-	const Login = async (e: any) => {
+	export const Login = async (e: any) => {
 		e.preventDefault();
 		if (email != '' && password != '') {
 			let ObjectLogin: object = {
@@ -28,19 +28,35 @@
 				.then((response) => response.json())
 				.then((data) => console.log((ErrorMess = data)));
 		}
+		console.log(ErrorMess);
+		return {
+			headers: { Location: '/' },
+			status: 302
+		};
 	};
 </script>
 
 <div class="flex flex-col items-center justify-center h-screen overflow-hidden">
 	<canvas class="siema" bind:this={el} />
 	{#if ErrorMess}
-		<p
-			in:fly={{ y: -800, duration: 130, delay: 50 }}
-			out:fly={{ duration: 100, delay: 50 }}
-			class="absolute -translate-x-1/2 top-24 left-1/2 text-red-900"
-		>
-			{ErrorMess.text}
-		</p>
+		{#if ErrorMess.status == 0}
+			<p
+				in:fly={{ y: -800, duration: 130, delay: 50 }}
+				out:fly={{ duration: 100, delay: 50 }}
+				class="absolute -translate-x-1/2 top-24 left-1/2 text-red-900"
+			>
+				{ErrorMess.text}
+			</p>
+		{/if}
+		{#if ErrorMess.status == 1}
+			<p
+				in:fly={{ y: -800, duration: 130, delay: 50 }}
+				out:fly={{ duration: 100, delay: 50 }}
+				class="absolute -translate-x-1/2 top-24 left-1/2 text-green-900"
+			>
+				{ErrorMess.text}
+			</p>
+		{/if}
 	{/if}
 	<form
 		class="bg-slate-300 p-5 m-5 rounded flex flex-col gap-4 w-1/5 absolute"

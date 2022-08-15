@@ -5,6 +5,7 @@
 	import Post from './Post/Post.svelte';
 	import { POST } from '../../constants/FetchDataMethods';
 	import { ProgressCircular, MaterialApp } from 'svelte-materialify';
+	import Form from '../Form/Form.svelte';
 	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
 		const response: Response = await fetch('http://localhost:8080/getdata');
@@ -27,28 +28,21 @@
 	if (typeof localStorage !== 'undefined') {
 		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
 	}
-	const ResetValuesOfForm = () => {
+	const ResetValuesOfForm = (): void => {
 		name = '';
 		Title = '';
 		Message = '';
 		image = null;
 	};
 
-	//open modal
-	let isModalOpen: boolean = false;
-	console.log(isModalOpen);
-
-	const LogOut = () => {
+	const LogOut = (): void => {
 		localStorage.clear();
 		ProfileObj = {};
 	};
 
-	const HandleOnClick = async (e: any) => {
+	const HandleOnClick = async (e: any): Promise<void> => {
 		e.preventDefault();
-		if (name == '' || Title == '' || Message == '') {
-			console.log('coś nie jest nie tak ');
-			return;
-		}
+
 		const obj: PostDetails = {
 			title: Title,
 			createdat: '22002',
@@ -74,58 +68,36 @@
 	};
 </script>
 
-<div class="mb-8">
-	<div>
-		<form
-			on:submit={(e) => HandleOnClick(e)}
-			enctype="multipart/form-data"
-			method="post"
-			class="mb-10 flex flex-col w-1/5 m-4 gap-3"
-		>
-			<input class="border-4" bind:value={Title} type="text" placeholder="wprowadz tytuł" />
-			<input class="border-4" bind:value={name} type="text" placeholder="wprowadź nazwe" />
-			<textarea class="border-4" bind:value={Message} type="text" placeholder="wprowadz message" />
-			<input
-				name="PostFile"
-				type="file"
-				accept=".jpg, .jpeg, .png"
-				on:change={(e) => onFileSelected(e)}
-			/>
-			<button
-				class="bg-slate-300 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white"
-				type="submit"
+<div class="mb-8 bg-black">
+	<Form {HandleOnClick} bind:Title bind:name bind:Message {onFileSelected} />
+	{#key ProfileObj}
+		{#if Object.keys(ProfileObj).length === 0}
+			<div
+				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
 			>
-				Stwórz post
-			</button>
-		</form>
-		{#key ProfileObj}
-			{#if Object.keys(ProfileObj).length === 0}
-				<div
-					class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
-				>
-					<a href="/register"> Zaloguj się </a>
-				</div>
-			{/if}
-			{#if Object.keys(ProfileObj).length !== 0}
-				<div
-					class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
-					on:click={LogOut}
-				>
-					Wyloguj się
-				</div>
-			{/if}
-		{/key}
-		<h1 class="text-5xl font-bold fa text-center m-9">Posty</h1>
-
-		{#if Posts.length === 0}
-			<div class="m-20" style="display: flex; justify-content: center">
-				<ProgressCircular indeterminate color="pink" size={80} />
+				<a href="/register"> Zaloguj się </a>
 			</div>
 		{/if}
-		<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
-			{#each Posts as post}
-				<Post {post} />
-			{/each}
+		{#if Object.keys(ProfileObj).length !== 0}
+			<div
+				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
+				on:click={LogOut}
+			>
+				Wyloguj się
+			</div>
+		{/if}
+	{/key}
+	<div class="text-white bg-slate-500 w-48 text-center p-2 rounded">Stwórz posta</div>
+	<h1 class="text-5xl font-bold fa text-center m-9 text-white">Posty</h1>
+
+	{#if Posts.length === 0}
+		<div class="m-20" style="display: flex; justify-content: center">
+			<ProgressCircular indeterminate color="pink" size={80} />
 		</div>
+	{/if}
+	<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
+		{#each Posts as post}
+			<Post {post} />
+		{/each}
 	</div>
 </div>
