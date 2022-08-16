@@ -1,16 +1,6 @@
 <script context="module" lang="ts">
 	/** @type {import('./__types/[slug]').Load} */
-	export async function load({
-		params,
-		fetch,
-		session,
-		stuff
-	}: {
-		params: any;
-		fetch: any;
-		session: any;
-		stuff: any;
-	}) {
+	export async function load({ params, fetch }: { params: any; fetch: any }) {
 		const response: Response = await fetch(`http://localhost:8080/getSinglePost?q=${params.slug}`);
 		console.log(response);
 		return {

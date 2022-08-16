@@ -1,7 +1,6 @@
 <script lang="ts">
 	export let HandleOnClick: any;
 	export let Title: any;
-	export let name: any;
 	export let Message: any;
 	export let onFileSelected: any;
 </script>
@@ -13,7 +12,6 @@
 	class="mb-10 flex flex-col w-1/5 p-4 gap-3 text-white"
 >
 	<input required class="border-4" bind:value={Title} type="text" placeholder="wprowadz tytuł" />
-	<input required class="border-4" bind:value={name} type="text" placeholder="wprowadź nazwe" />
 	<textarea
 		required
 		class="border-4"
@@ -22,6 +20,7 @@
 		placeholder="wprowadz message"
 	/>
 	<input
+		required
 		name="PostFile"
 		type="file"
 		class="bg-red"

@@ -1,3 +1,6 @@
+<script context="module" lang="ts">
+</script>
+
 <script lang="ts">
 	import Input from '../components/addons/Input.svelte';
 
@@ -8,12 +11,13 @@
 	import { POST } from '../constants/FetchDataMethods';
 	import { onMount } from 'svelte';
 	import { createScene } from '../scene';
+
 	let el: any;
 
 	onMount(() => {
 		createScene(el);
 	});
-	let SessionData: any;
+	export let SessionData: any;
 	export async function Login(e: any) {
 		localStorage.clear();
 		e.preventDefault();
@@ -35,10 +39,9 @@
 		let ProfileObj: any;
 		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
 		console.log(ProfileObj);
-		return {
-			status: 302,
-			redirect: '/'
-		};
+		if (SessionData.status == 1) {
+			location.href = '/';
+		}
 	}
 </script>
 

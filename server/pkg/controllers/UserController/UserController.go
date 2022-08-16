@@ -106,6 +106,7 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			var UserData = &models.User{}
 			Info := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&UserData)
 			fmt.Println(Info)
+
 			if Info == nil {
 				errorPass := bcrypt.CompareHashAndPassword([]byte(UserData.Password), []byte(user.Password))
 				if errorPass != nil && errorPass == bcrypt.ErrMismatchedHashAndPassword {

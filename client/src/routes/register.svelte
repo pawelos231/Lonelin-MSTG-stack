@@ -2,6 +2,7 @@
 	let name: string = '';
 	let email: string = '';
 	let password: string = '';
+	let image: any = '';
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
 	import type { StatusLogin, UserLoginInfo } from '../interfaces/UserInfoLogin';
@@ -20,7 +21,8 @@
 			const obj: UserLoginInfo = {
 				name,
 				email,
-				password
+				password,
+				image
 			};
 			await fetch('http://localhost:8080/createUser', {
 				method: POST,
@@ -35,6 +37,9 @@
 				});
 			const respons: string = JSON.parse(localStorage.getItem('profile') || '{}');
 			console.log(respons);
+		}
+		if (Info.status == 1) {
+			location.href = '/';
 		}
 	};
 </script>
@@ -62,7 +67,7 @@
 <div class="flex flex-col items-center justify-center h-screen overflow-hidden">
 	<canvas class="siema" bind:this={el} />
 	<form
-		class="bg-white opacity-90 h-1/3 p-5 m-5 rounded flex flex-col gap-4 w-1/5 items-center absolute"
+		class="bg-white opacity-90 h-2/5 p-5 m-5 rounded flex flex-col gap-4 w-1/5 items-center absolute"
 		on:submit={(e) => SendUserData(e)}
 	>
 		<input
@@ -86,6 +91,7 @@
 			placeholder="wprowadz hasło"
 			class=" w-4/5 bg-white p-2 transition duration-150 ease-linear  hover:bg-black hover:text-white border-2 rounded-none"
 		/>
+		<input type="file" placeholder="dodaj plik" />
 		<button
 			type="submit"
 			class="p-4 bg-black text-white rounded transition ease-linear duration-75 hover:scale-105 w-3/5"

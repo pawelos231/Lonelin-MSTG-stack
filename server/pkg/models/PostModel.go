@@ -18,6 +18,7 @@ type User struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"Password"`
+	Image    string `json:"Image"`
 }
 
 type Comment struct {
@@ -26,10 +27,10 @@ type Comment struct {
 	CreatedAt   string `json:"createdat"`
 	PostId      string `json:"postid"`
 	Likes       string `json:"likes"`
-	parentId    string `json:"parentid"`
+	ParentId    string `json:"parentid"`
 	NestedLevel string `json:"nestedlevel"`
 	Repondsto   string `json:"respondsto"`
-	updatedAt   string `json:"updateat"`
+	UpdatedAt   string `json:"updateat"`
 }
 
 //Token struct declaration
