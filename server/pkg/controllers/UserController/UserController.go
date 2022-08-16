@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
@@ -116,9 +117,11 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 					json.NewEncoder(w).Encode(ErrorInfo)
 				} else {
 					expirationTime := time.Now().Add(time.Hour * 24)
+					id := uuid.New()
 					tkToHash := &models.Token{
-						Name:  user.Name,
-						Email: user.Email,
+						UserID: id.String(),
+						Name:   UserData.Name,
+						Email:  UserData.Email,
 						StandardClaims: &jwt.StandardClaims{
 							ExpiresAt: expirationTime.Unix(),
 						},

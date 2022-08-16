@@ -11,10 +11,8 @@ import (
 
 func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		var header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOjAsIk5hbWUiOiJYREREREREREREIiwiRW1haWwiOiJwYXdlbG9zQHBhd2Vsb3Nla2RzYWRhc2RzYSIsImV4cCI6MTY2MDc0NzQ2MH0.XrfTO1MCfNu-tg9IopTZ3Hm2x-Qd629hN3cOyn2QymM"
-		var header2 = req.Header.Get("access-token")
+		var header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiI1ODYwYWQ5OS04NDdiLTQyZDctODYwMS04N2M4Mjc0OWQzYzYiLCJOYW1lIjoicGF3ZWxvcyIsIkVtYWlsIjoicGF3ZWxvc0BwYXdlbG9zIiwiZXhwIjoxNjYwNzYxMzk4fQ.JftPsEpkOHnPGibsMfZFE7xz0PTBss-fhfwaLm4ajkk"
 
-		fmt.Println(header2)
 		tk := &models.Token{}
 		tkn, err := jwt.ParseWithClaims(header, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte("secret"), nil

@@ -23,7 +23,6 @@
 		e.preventDefault();
 		if (email != '' && password != '') {
 			let ObjectLogin: object = {
-				name,
 				email,
 				password
 			};

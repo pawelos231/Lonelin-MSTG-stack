@@ -35,7 +35,8 @@ type Comment struct {
 
 //Token struct declaration
 type Token struct {
-	Name  string
-	Email string
+	UserID any
+	Name   string
+	Email  string
 	*jwt.StandardClaims
 }

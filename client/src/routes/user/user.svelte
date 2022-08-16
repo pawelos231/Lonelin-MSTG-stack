@@ -5,11 +5,9 @@
 	const Onclick = async () => {
 		const parsed = JSON.parse(localStorage.getItem('profile'));
 		console.log(parsed.token);
-		const res = await fetch('http://localhost:8080/auth/userId', {
-			headers: { 'access-token': parsed.token, 'Access-Control-Allow-Origin': '*' }
-		});
-
-		console.log(res);
+		const res = await fetch('http://localhost:8080/auth/userId');
+		let data = await res.json();
+		console.log(data);
 	};
 </script>
 
