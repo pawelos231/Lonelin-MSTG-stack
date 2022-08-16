@@ -10,10 +10,14 @@ import (
 )
 
 func PostsHandlers(r *mux.Router, col *mongo.Collection, ctx context.Context) *mux.Router {
+
 	r.Use(CommonMiddleware)
 	r.HandleFunc("/PostAPost", PostControllers.PostDataToDataBase(col, ctx)).Methods("POST")
 	r.HandleFunc("/getdata", PostControllers.GetDataFromDatabase(col, ctx)).Methods("GET")
 	r.HandleFunc("/getSinglePost", PostControllers.GetPostByUniqueId(col, ctx)).Methods("GET")
+	r.HandleFunc("/UpdatePost", PostControllers.UpdatePostFromDatabase(col, ctx)).Methods("PUT")
+	r.HandleFunc("/DeletePost", PostControllers.DeletePostFromDatabase(col, ctx)).Methods("DELETE")
+
 	return r
 
 }

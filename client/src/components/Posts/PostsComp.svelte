@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { PostDetails } from '../../interfaces/PostDetails';
+	import type { UserInfo } from '../../interfaces/UserInfoLogin';
 	import { PostStore } from '../../store/PostStore';
 	import { onMount } from 'svelte';
 	import Post from './Post/Post.svelte';
 	import { POST } from '../../constants/FetchDataMethods';
 	import { ProgressCircular, MaterialApp } from 'svelte-materialify';
 	import Form from '../Form/Form.svelte';
+
 	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
 		const response: Response = await fetch('http://localhost:8080/getdata');
@@ -23,7 +25,7 @@
 	let Title: string = '';
 	let Message: string = '';
 	let image: any;
-	let ProfileObj: any = {};
+	let ProfileObj: UserInfo | any = {};
 	//dodac tagi, sprawić by kliknięcie na stwórz post to był taki popup,
 	if (typeof localStorage !== 'undefined') {
 		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
