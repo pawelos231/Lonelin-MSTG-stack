@@ -15,6 +15,7 @@ type PostInformiation struct {
 
 //later add role
 type User struct {
+	UserId   string `json:"userid"`
 	Name     string `json:"name"`
 	Email    string `json:"email"`
 	Password string `json:"Password"`

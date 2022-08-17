@@ -45,9 +45,10 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 				}
 				json.NewEncoder(w).Encode(err)
 			}
-
+			id := uuid.New().String()
 			dash := string(password)
 			user.Password = dash
+			user.UserId = id
 
 			var User bson.M
 			Error := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&User)
@@ -58,6 +59,7 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			}
 
 			if Error != nil {
+
 				result, insertErr := col.InsertOne(ctx, user)
 				RegisterErrors(result, insertErr)
 				expirationTime := time.Now().Add(time.Hour * 24)
@@ -117,9 +119,8 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 					json.NewEncoder(w).Encode(ErrorInfo)
 				} else {
 					expirationTime := time.Now().Add(time.Hour * 24)
-					id := uuid.New()
 					tkToHash := &models.Token{
-						UserID: id.String(),
+						UserID: UserData.UserId,
 						Name:   UserData.Name,
 						Email:  UserData.Email,
 						StandardClaims: &jwt.StandardClaims{
