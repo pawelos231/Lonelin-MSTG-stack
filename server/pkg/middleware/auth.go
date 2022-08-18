@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"BackendGo/pkg/models"
 	"context"
 	"fmt"
 	"net/http"
@@ -13,8 +12,7 @@ func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 
 		tokenValue := req.FormValue("q")
-
-		tk := &models.Token{}
+		tk := jwt.MapClaims{}
 		tkn, err := jwt.ParseWithClaims(tokenValue, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte("secret"), nil
 		})
@@ -34,8 +32,8 @@ func JwtVerify(next http.Handler) http.Handler {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
-
-		context := context.WithValue(req.Context(), "user", tk)
-		next.ServeHTTP(w, req.WithContext(context))
+		
+		Context := context.WithValue(req.Context(), "user", tk)
+		next.ServeHTTP(w, req.WithContext(Context))
 	})
 }

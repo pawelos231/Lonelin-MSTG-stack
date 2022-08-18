@@ -2,6 +2,7 @@ package Routes
 
 import (
 	PostControllers "BackendGo/pkg/controllers/PostController"
+	"BackendGo/pkg/middleware"
 	"context"
 	"net/http"
 
@@ -12,11 +13,14 @@ import (
 func PostsHandlers(r *mux.Router, col *mongo.Collection, ctx context.Context) *mux.Router {
 
 	r.Use(CommonMiddleware)
-	r.HandleFunc("/PostAPost", PostControllers.PostDataToDataBase(col, ctx)).Methods("POST")
 	r.HandleFunc("/getdata", PostControllers.GetDataFromDatabase(col, ctx)).Methods("GET")
 	r.HandleFunc("/getSinglePost", PostControllers.GetPostByUniqueId(col, ctx)).Methods("GET")
-	r.HandleFunc("/UpdatePost", PostControllers.UpdatePostFromDatabase(col, ctx)).Methods("PUT")
-	r.HandleFunc("/DeletePost", PostControllers.DeletePostFromDatabase(col, ctx)).Methods("DELETE")
+
+	s := r.PathPrefix("/").Subrouter()
+	s.Use(middleware.JwtVerify)
+	s.HandleFunc("/PostAPost", PostControllers.PostDataToDataBase(col, ctx)).Methods("POST")
+	s.HandleFunc("/UpdatePost", PostControllers.UpdatePostFromDatabase(col, ctx)).Methods("PUT")
+	s.HandleFunc("/DeletePost", PostControllers.DeletePostFromDatabase(col, ctx)).Methods("DELETE")
 
 	return r
 

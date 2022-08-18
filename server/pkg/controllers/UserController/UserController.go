@@ -159,9 +159,7 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 func FetchUserById(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 		if req.Method == http.MethodGet {
-			fmt.Println("siemaController")
 			data := req.Context().Value("user")
-			fmt.Println(data)
 			json.NewEncoder(w).Encode(data)
 		}
 	}

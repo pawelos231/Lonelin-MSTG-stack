@@ -3,7 +3,6 @@
 	if (typeof localStorage !== 'undefined') {
 		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
 	}
-	console.log(ProfileObj.name, 'chuj');
 </script>
 
 <nav class="w-100 bg-slate-600 p-3 ">

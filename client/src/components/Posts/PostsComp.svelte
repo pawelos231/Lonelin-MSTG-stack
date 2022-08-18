@@ -42,15 +42,15 @@
 
 	const HandleOnClick = async (e: any): Promise<void> => {
 		e.preventDefault();
-
+		var today: any = new Date();
+		let date: string = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 		const obj: PostDetails = {
 			title: Title,
-			createdat: '22002',
+			createdat: date,
 			message: Message,
-			image: image,
-			username: ProfileObj.name
+			image: image
 		};
-		await fetch('http://localhost:8080/PostAPost', {
+		await fetch(`http://localhost:8080/PostAPost?q=${ProfileObj.token}`, {
 			method: POST,
 			body: JSON.stringify(obj)
 		});

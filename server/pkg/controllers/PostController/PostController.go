@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"reflect"
 
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -63,6 +64,21 @@ func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.Handler
 			*/
 			var PostDetails PostInformiation
 			json.NewDecoder(req.Body).Decode(&PostDetails)
+
+			//middleware to check the user
+
+			UserData := req.Context().Value("user")
+			var temp = map[string]interface{}{}
+			UserData = req.Context().Value("user")
+			temp = UserData.(jwt.MapClaims)
+			for key, val := range temp {
+				if key == "Name" {
+					PostDetails.UserName = val.(string)
+				}
+			}
+			fmt.Println(temp)
+			fmt.Println(UserData)
+
 			fmt.Println("Collection Type: ", reflect.TypeOf(col), "/n")
 			result, insertErr := col.InsertOne(ctx, PostDetails)
 			if insertErr != nil {
