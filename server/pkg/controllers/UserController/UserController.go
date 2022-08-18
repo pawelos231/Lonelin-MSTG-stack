@@ -64,8 +64,9 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 				RegisterErrors(result, insertErr)
 				expirationTime := time.Now().Add(time.Hour * 24)
 				tkToHash := &models.Token{
-					Name:  user.Name,
-					Email: user.Email,
+					UserID: user.UserId,
+					Name:   user.Name,
+					Email:  user.Email,
 					StandardClaims: &jwt.StandardClaims{
 						ExpiresAt: expirationTime.Unix(),
 					},

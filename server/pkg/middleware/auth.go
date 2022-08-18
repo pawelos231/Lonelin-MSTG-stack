@@ -11,10 +11,11 @@ import (
 
 func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		var header = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiI1ODYwYWQ5OS04NDdiLTQyZDctODYwMS04N2M4Mjc0OWQzYzYiLCJOYW1lIjoicGF3ZWxvcyIsIkVtYWlsIjoicGF3ZWxvc0BwYXdlbG9zIiwiZXhwIjoxNjYwNzYxMzk4fQ.JftPsEpkOHnPGibsMfZFE7xz0PTBss-fhfwaLm4ajkk"
+
+		tokenValue := req.FormValue("q")
 
 		tk := &models.Token{}
-		tkn, err := jwt.ParseWithClaims(header, tk, func(token *jwt.Token) (interface{}, error) {
+		tkn, err := jwt.ParseWithClaims(tokenValue, tk, func(token *jwt.Token) (interface{}, error) {
 			return []byte("secret"), nil
 		})
 		if err != nil {

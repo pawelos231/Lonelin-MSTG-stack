@@ -13,7 +13,7 @@ type PostInformiation struct {
 //later add more things like: gender, createdPosts, liked comments, some kind of points etc.
 //if this file becomes too big, move it to different smaller files
 
-//later add role
+//later add role, gender, description of profile etc
 type User struct {
 	UserId   string `json:"userid"`
 	Name     string `json:"name"`
