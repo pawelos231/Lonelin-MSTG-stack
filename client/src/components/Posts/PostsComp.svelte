@@ -21,7 +21,6 @@
 			Posts = data;
 		});
 	});
-	let name: string = '';
 	let Title: string = '';
 	let Message: string = '';
 	let image: any;

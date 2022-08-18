@@ -1,13 +1,13 @@
-<script lang="ts">
-	// @ts-nocheck
-
-	const Onclick = async () => {
-		const parsed = JSON.parse(localStorage.getItem('profile'));
-		console.log(parsed.token);
-		const res = await fetch(`http://localhost:8080/auth/userId?q=${parsed.token}`);
-		let data = await res.json();
-		console.log(data);
-	};
+<script>
 </script>
 
-<h1 on:click={() => Onclick()} class="flex justify-center">Kliknij i wyślij requesta</h1>
+<nav>
+	<ul>
+		<li>Główna</li>
+		<li>Posty</li>
+		<li>Komentarze</li>
+		<li>Polubione posty</li>
+		<li>Customize account</li>
+		<li>Darkmode</li>
+	</ul>
+</nav>
