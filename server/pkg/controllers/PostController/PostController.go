@@ -69,15 +69,9 @@ func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.Handler
 
 			UserData := req.Context().Value("user")
 			var temp = map[string]interface{}{}
-			UserData = req.Context().Value("user")
 			temp = UserData.(jwt.MapClaims)
-			for key, val := range temp {
-				if key == "Name" {
-					PostDetails.UserName = val.(string)
-				}
-			}
-			fmt.Println(temp)
-			fmt.Println(UserData)
+			var Name = temp["Name"]
+			PostDetails.UserName = Name.(string)
 
 			fmt.Println("Collection Type: ", reflect.TypeOf(col), "/n")
 			result, insertErr := col.InsertOne(ctx, PostDetails)
