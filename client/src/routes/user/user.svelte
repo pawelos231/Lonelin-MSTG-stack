@@ -1,4 +1,13 @@
-<script>
+<script lang="ts">
+	import { onMount } from 'svelte';
+	onMount(function () {
+		let ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
+		console.log(ProfileObj);
+		if (Object.keys(ProfileObj).length == 0) {
+			console.log('NIEZALOGOWANY');
+			location.href = '/';
+		}
+	});
 </script>
 
 <nav>
