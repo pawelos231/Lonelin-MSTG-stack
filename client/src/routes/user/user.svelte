@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import type { UserInfo } from '../../interfaces/UserInfoLogin';
 	onMount(function () {
-		let ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
+		const ProfileObj: Object | UserInfo = JSON.parse(localStorage.getItem('profile') || '{}');
 		console.log(ProfileObj);
 		if (Object.keys(ProfileObj).length == 0) {
 			console.log('NIEZALOGOWANY');

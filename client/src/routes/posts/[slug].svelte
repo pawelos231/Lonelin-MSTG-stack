@@ -1,18 +1,32 @@
 <script context="module" lang="ts">
 	/** @type {import('./__types/[slug]').Load} */
-	export async function load({ params, fetch }: { params: any; fetch: any }): Promise<{
-		status: number;
-		props: {
-			post: any;
-		};
-	}> {
+	export async function load({ params, fetch }: { params: any; fetch: any }): Promise<
+		| {
+				status: number;
+				props: {
+					post: any;
+				};
+				error?: undefined | any;
+		  }
+		| {
+				status: number;
+				error: Error;
+				props?: undefined | any;
+		  }
+	> {
 		const response: Response = await fetch(`http://localhost:8080/getSinglePost?q=${params.slug}`);
 		console.log(response);
+		if (response.ok) {
+			return {
+				status: response.status,
+				props: {
+					post: await response.json()
+				}
+			};
+		}
 		return {
 			status: response.status,
-			props: {
-				post: await response.json()
-			}
+			error: new Error('Could not fetch the guides')
 		};
 	}
 </script>
