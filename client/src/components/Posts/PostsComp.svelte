@@ -6,20 +6,32 @@
 	import Post from './Post/Post.svelte';
 	import { POST } from '../../constants/FetchDataMethods';
 	import { ProgressCircular, MaterialApp } from 'svelte-materialify';
-	import Form from '../Form/Form.svelte';
+	import PostForm from '../Form/PostForm.svelte';
+	let OpenModalPostForm: boolean = false;
+
+	const OpenModalPostFormHandler = () => {
+		OpenModalPostForm = !OpenModalPostForm;
+		console.log(OpenModalPostForm);
+	};
 
 	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
 		const response: Response = await fetch('http://localhost:8080/getdata');
-		function delay(time: number) {
-			return new Promise((resolve) => setTimeout(resolve, time));
-		}
+
 		//delay function to check if laoding state works
 		PostStore.subscribe(async (data) => {
 			data = await response.json();
 			console.log(data);
 			Posts = data;
 		});
+	});
+	let parsed: any;
+	onMount(async function () {
+		parsed = JSON.parse(localStorage.getItem('profile') || '{}');
+		console.log(parsed.token);
+		const res = await fetch(`http://localhost:8080/auth/userId?q=${parsed.token}`);
+		let data = await res.json();
+		console.log(data);
 	});
 	let Title: string = '';
 	let Message: string = '';
@@ -57,6 +69,7 @@
 		Posts = [...Posts, obj];
 		console.log(Posts);
 		ResetValuesOfForm();
+		OpenModalPostForm = false;
 	};
 	const onFileSelected = (e: any) => {
 		let ImageFromSelect: any = e.target.files[0];
@@ -67,12 +80,19 @@
 			image = e.target?.result;
 		};
 	};
+	console.log(Posts);
 </script>
 
-<div class="mb-8 bg-black">
+<div class="mb-8 bg-black p-0">
 	{#if Object.keys(ProfileObj).length !== 0}
-		<Form {HandleOnClick} bind:Title bind:Message {onFileSelected} />
+		{#if OpenModalPostForm}
+			<PostForm {HandleOnClick} bind:Title bind:Message {onFileSelected} />
+		{/if}
+		<button class="absolute w-48 bg-slate-400 p-3 m-5" on:click={OpenModalPostFormHandler}
+			>Stwórz Post</button
+		>
 	{/if}
+
 	{#if Object.keys(ProfileObj).length === 0}
 		<p class="text-white">Zaloguj się by móc tworzyć quality posty</p>
 	{/if}
@@ -98,17 +118,23 @@
 	<div class="text-white bg-slate-500 w-48 text-center p-2 rounded">Stwórz posta</div>
 	-->
 
-	<h1 class="text-5xl font-bold fa text-center m-9 text-white">Posty</h1>
-
-	{#if Posts.length === 0}
+	<h1 class="text-5xl font-bold fa text-center bg-black p-9 text-white">Posty</h1>
+	{#if Posts == null}
 		<div class="m-20" style="display: flex; justify-content: center">
 			<ProgressCircular indeterminate color="pink" size={80} />
 		</div>
 	{/if}
+	{#if Posts?.length == 0}
+		<div>Nic tu nie ma niestety</div>
+	{/if}
 
 	<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
-		{#each Posts as post}
-			<Post {post} />
-		{/each}
+		{#if Posts !== null}
+			{#each Posts as post}
+				{#if post != null}
+					<Post {post} {parsed} />
+				{/if}
+			{/each}
+		{/if}
 	</div>
 </div>

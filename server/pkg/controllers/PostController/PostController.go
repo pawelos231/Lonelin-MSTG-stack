@@ -1,6 +1,7 @@
 package PostControllers
 
 import (
+	"BackendGo/pkg/models"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -13,14 +14,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
-
-type PostInformiation struct {
-	Title     string `json:"title"`
-	CreatedAt string `json:"createdAt"`
-	Image     string `json:"image"`
-	Message   string `json:"message"`
-	UserName  string `json:"userName"`
-}
 
 func GetDataFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
@@ -62,7 +55,7 @@ func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.Handler
 				fmt.Printf("Upload fILE: %+v\n", handler.Size)
 				fmt.Printf("Upload fILE: %+v\n", handler.Header)
 			*/
-			var PostDetails PostInformiation
+			var PostDetails models.PostInformiation
 			json.NewDecoder(req.Body).Decode(&PostDetails)
 
 			//middleware to check the user
@@ -71,7 +64,9 @@ func PostDataToDataBase(col *mongo.Collection, ctx context.Context) http.Handler
 			var temp = map[string]interface{}{}
 			temp = UserData.(jwt.MapClaims)
 			var Name = temp["Name"]
+			var Email = temp["Email"]
 			PostDetails.UserName = Name.(string)
+			PostDetails.Email = Email.(string)
 
 			fmt.Println("Collection Type: ", reflect.TypeOf(col), "/n")
 			result, insertErr := col.InsertOne(ctx, PostDetails)

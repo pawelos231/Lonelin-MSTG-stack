@@ -8,6 +8,7 @@ type PostInformiation struct {
 	Image     string `json:"image"`
 	Message   string `json:"message"`
 	UserName  string `json:"userName"`
+	Email     string `json:"email"`
 }
 
 //later add more things like: gender, createdPosts, liked comments, some kind of points etc.

@@ -26,7 +26,7 @@
 		}
 		return {
 			status: response.status,
-			error: new Error('Could not fetch the guides')
+			error: new Error('Could not fetch the Posts')
 		};
 	}
 </script>

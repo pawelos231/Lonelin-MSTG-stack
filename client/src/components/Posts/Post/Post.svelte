@@ -2,7 +2,9 @@
 	import type { PostDetails } from '../../../interfaces/PostDetails';
 	import { Card, CardText } from 'svelte-materialify';
 	export let post: PostDetails | any;
-	console.log(post._id);
+	export let parsed: any;
+	console.log(parsed.email);
+	console.log(post.email);
 	let Temp: string = '';
 	if (post.message.length > 150) {
 		for (let i = 0; i <= 150; i++) {
@@ -13,7 +15,7 @@
 </script>
 
 <Card hover outlined style="width:450px; height:70vh;">
-	<a href="/posts/{post._id}">
+	<a sveltekit:prefetch href="/posts/{post._id}">
 		<div class="basis-1/4 bg-slate-300 h-full rounded p-3  relative">
 			<div class="h-2/4 overflow-hidden">
 				<img class=" top-0 left-0 h-full object-cover w-full" src={post.image} alt="" />
@@ -34,6 +36,13 @@
 						<div class="absolute bottom-3 left-5 text-slate-900">Czytaj więcej</div>
 					{/if}
 				</p>
+				{#if post.email == parsed.email}
+					<p
+						class="text-red-600 absolute right-10 bottom-0 hover:text-yellow-200 hover:bg-slate-500 p-3 rounded"
+					>
+						Usuń posta
+					</p>
+				{/if}
 			</CardText>
 		</div>
 	</a>
