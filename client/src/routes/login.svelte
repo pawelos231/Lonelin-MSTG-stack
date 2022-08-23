@@ -6,7 +6,6 @@
 
 	let email: string = '';
 	let password: string = '';
-	let name: string = '';
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
 	import { onMount } from 'svelte';

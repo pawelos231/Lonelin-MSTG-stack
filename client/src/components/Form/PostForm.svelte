@@ -13,7 +13,7 @@ items-center"
 		on:submit={(e) => HandleOnClick(e)}
 		enctype="multipart/form-data"
 		method="post"
-		class="mb-10 flex flex-col w-1/5 p-4  bg-white gap-9 "
+		class="mb-10 flex flex-col w-1/5 p-4  bg-slate-600 gap-9 "
 	>
 		<input
 			required
