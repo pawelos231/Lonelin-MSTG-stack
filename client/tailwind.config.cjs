@@ -6,6 +6,9 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				sans: ['Poppins', ...defaultTheme.fontFamily.sans]
+			},
+			rotate: {
+				360: '360deg'
 			}
 		}
 	},

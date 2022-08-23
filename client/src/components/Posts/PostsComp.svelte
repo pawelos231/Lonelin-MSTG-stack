@@ -11,7 +11,6 @@
 
 	const OpenModalPostFormHandler = () => {
 		OpenModalPostForm = !OpenModalPostForm;
-		console.log(OpenModalPostForm);
 	};
 
 	let Posts: PostDetails[] | any = [];
@@ -86,7 +85,13 @@
 <div class="mb-8 bg-black p-0">
 	{#if Object.keys(ProfileObj).length !== 0}
 		{#if OpenModalPostForm}
-			<PostForm {HandleOnClick} bind:Title bind:Message {onFileSelected} />
+			<PostForm
+				{OpenModalPostFormHandler}
+				{HandleOnClick}
+				bind:Title
+				bind:Message
+				{onFileSelected}
+			/>
 		{/if}
 		<button class="absolute w-48 bg-slate-400 p-3 m-5" on:click={OpenModalPostFormHandler}
 			>Stwórz Post</button

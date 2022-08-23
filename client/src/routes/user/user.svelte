@@ -20,7 +20,7 @@
 
 <div class="overflow-hidden flex flex-col justify-center relative mt-0">
 	<canvas bind:this={el} />
-	<nav class="h-screen absolute">
+	<nav class="h-screen absolute opacity-90">
 		<ul class="flex flex-col gap-5 bg-gray-800 w-52 h-full pt-5">
 			<LiElement value="Główna" />
 			<LiElement value="Posty" />
@@ -34,11 +34,11 @@
 		<div
 			class="bg-white text-black w-1/3 flex justify-center flex-col items-center rounded-lg overflow-hidden p-5"
 		>
-			<h2 class="text-4xl">Info</h2>
+			<h2 class="text-4xl">Profile Info</h2>
 			<div class="flex  w-full mt-6">
 				<div class="flex flex-col basis-1/2 gap-3">
 					<ProileInfoMainSite title="Ustawienia" />
-					<ProileInfoMainSite title="Zmiana Profilowego" />
+					<ProileInfoMainSite title="Dane konta" />
 				</div>
 				<div class="flex flex-col basis-1/2 gap-3">
 					<ProileInfoMainSite title="Polityka Prywatności" />

@@ -3,17 +3,24 @@
 	export let Title: any;
 	export let Message: any;
 	export let onFileSelected: any;
+	export let OpenModalPostFormHandler: any;
 </script>
 
 <div
 	class="w-screen h-screen fixed z-10 backdrop-blur-md flex justify-center
-items-center"
+items-center  "
 >
+	<div
+		on:click={OpenModalPostFormHandler}
+		class="absolute top-4 left-4 text-5xl text-white cursor-pointer transition-all duration-100 hover:rotate-[360deg]"
+	>
+		X
+	</div>
 	<form
 		on:submit={(e) => HandleOnClick(e)}
 		enctype="multipart/form-data"
 		method="post"
-		class="mb-10 flex flex-col w-1/5 p-4  bg-slate-600 gap-9 "
+		class="mb-10 flex flex-col w-1/5 p-4  bg-slate-600 gap-9 rounded z-10 "
 	>
 		<input
 			required

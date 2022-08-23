@@ -37,11 +37,14 @@
 					{/if}
 				</p>
 				{#if post.email == parsed.email}
-					<p
-						class="text-red-600 absolute right-10 bottom-0 hover:text-yellow-200 hover:bg-slate-500 p-3 rounded"
-					>
-						Usuń posta
-					</p>
+					<div class="flex flex-col absolute right-10 bottom-0 ">
+						<p class="p-2 text-green-800 hover:text-yellow-200 hover:bg-slate-500 rounded">
+							Edytuj Posta
+						</p>
+						<p class="text-red-600 hover:text-yellow-200 hover:bg-slate-500 p-2 rounded">
+							Usuń posta
+						</p>
+					</div>
 				{/if}
 			</CardText>
 		</div>
