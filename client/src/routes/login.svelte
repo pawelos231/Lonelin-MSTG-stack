@@ -9,7 +9,7 @@
 	import { fly } from 'svelte/transition';
 	import { POST } from '../constants/FetchDataMethods';
 	import { onMount } from 'svelte';
-	import { createScene } from '../scene';
+	import { createScene } from '../scenes/scene';
 
 	let el: any;
 

@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import type { UserInfo } from '../../interfaces/UserInfoLogin';
-	import LiElement from '../../components/addons/UserProfile/liElement.svelte';
-	import { createScene } from '../../scene';
+	import { createScene } from '../../scenes/scene';
 	import ProileInfoMainSite from '../../components/addons/UserProfile/ProfileInfoMainSite.svelte';
 	onMount(function () {
 		const ProfileObj: Object | UserInfo = JSON.parse(localStorage.getItem('profile') || '{}');
@@ -12,6 +11,7 @@
 			location.href = '/';
 		}
 	});
+
 	let el: any;
 	onMount(() => {
 		createScene(el);
@@ -20,16 +20,6 @@
 
 <div class="overflow-hidden flex flex-col justify-center relative mt-0">
 	<canvas bind:this={el} />
-	<nav class="h-screen absolute opacity-90">
-		<ul class="flex flex-col gap-5 bg-gray-800 w-52 h-full pt-5">
-			<LiElement value="Główna" />
-			<LiElement value="Posty" />
-			<LiElement value="Komentarze" />
-			<LiElement value="Polubione Posty" />
-			<LiElement value="Customize Account" />
-			<LiElement value="Darkmode" />
-		</ul>
-	</nav>
 	<section class=" absolute w-screen h-screen flex flex-col justify-center items-center ">
 		<div
 			class="bg-white text-black w-1/3 flex justify-center flex-col items-center rounded-lg overflow-hidden p-5"

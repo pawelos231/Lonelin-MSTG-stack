@@ -7,7 +7,7 @@
 	import { POST } from '../constants/FetchDataMethods';
 	import type { StatusLogin, UserLoginInfo } from '../interfaces/UserInfoLogin';
 	import { onMount } from 'svelte';
-	import { createScene } from '../scene';
+	import { createScene } from '../scenes/scene';
 	let el: any;
 
 	onMount(() => {
