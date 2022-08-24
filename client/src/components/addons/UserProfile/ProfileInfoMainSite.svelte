@@ -3,7 +3,7 @@
 </script>
 
 <div
-	class="  rounded-sm p-2 m-3 transition-colors duration-100 text-center cursor-pointer hover:bg-gray-300 "
+	class="  rounded p-2 m-3 transition-colors duration-100 text-center cursor-pointer hover:bg-gray-300 "
 >
 	<p class="text-xl mb-5">{title}</p>
 	<div class="text-gray-700 text-sm">

@@ -1,7 +1,19 @@
-<script>
+<script lang="ts">
 	import Footer from '../components/Footer/Footer.svelte';
 	import Navbar from '../components/Navbar/Navbar.svelte';
 	import '../app.css';
+	/*
+	//find a way to check the current location with someting like checking it every time a location changes
+
+	import { onMount } from 'svelte';
+	let ifUserPage: boolean = false;
+	onMount(function () {
+		if (location.href.startsWith('http://localhost:3000/user')) {
+			ifUserPage = true;
+			console.log(ifUserPage);
+		}
+	});
+	*/
 </script>
 
 <svelte:head>
@@ -11,7 +23,9 @@
 		rel="stylesheet"
 	/>
 </svelte:head>
+
 <Navbar />
+
 <main>
 	<slot />
 </main>

@@ -13,7 +13,7 @@
 	>
 		{#if Object.keys(ProfileObj).length !== 0}
 			<li>
-				<a href="/user/user"> {ProfileObj.name}</a>
+				<a href="/user"> {ProfileObj.name}</a>
 			</li>
 		{/if}
 		<li>
