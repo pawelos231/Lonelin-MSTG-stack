@@ -19,8 +19,17 @@
 		<li>
 			<a href="/"> Główna </a>
 		</li>
-		<li>siema</li>
-		<li>siema</li>
-		<li>siema</li>
+		<li class="relative">
+			<a href="/games">
+				Games
+				<p id="smalltext" class="absolute -top-2 -right-5  text-red-700 ">Nowość</p>
+			</a>
+		</li>
 	</ul>
 </nav>
+
+<style>
+	#smalltext {
+		font-size: 10px;
+	}
+</style>
