@@ -9,9 +9,6 @@ type PostInformiation struct {
 	Email     string `json:"email"`
 }
 
-//later add more things like: gender, createdPosts, liked comments, some kind of points etc.
-//if this file becomes too big, move it to different smaller files
-
 type Comment struct {
 	UserName    string `json:"username"`
 	UserId      string `json:"userid"`

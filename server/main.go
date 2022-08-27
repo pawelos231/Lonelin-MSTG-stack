@@ -36,9 +36,12 @@ func main() {
 	col := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_POSTS)
 	mime.AddExtensionType(".js", "application/javascript")
 
-	r := mux.NewRouter()
-	http.Handle("/api", Routes.UserHandlers(r, ctx, client))
-	http.Handle("/post", Routes.PostsHandlers(r, col, ctx))
+	corsObj := handlers.AllowedOrigins([]string{"*"})
+	credentials := handlers.AllowCredentials()
 
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), handlers.CORS()(r)))
+	router := mux.NewRouter()
+	http.Handle("/api", Routes.UserHandlers(router, ctx, client))
+	http.Handle("/post", Routes.PostsHandlers(router, col, ctx))
+
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), handlers.CORS(corsObj, credentials)(router)))
 }

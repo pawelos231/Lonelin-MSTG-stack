@@ -119,9 +119,31 @@ func UpdatePostFromDatabase(col *mongo.Collection, ctx context.Context) http.Han
 }
 func DeletePostFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		if req.Method == http.MethodDelete {
-			w.WriteHeader(http.StatusOK)
-			/*TODO: write some update post functionality when frontend is ready*/
+		fmt.Println("test2")
+		w.WriteHeader(http.StatusOK)
+
+		var DataFromUser string
+		json.NewDecoder(req.Body).Decode(&DataFromUser)
+		fmt.Println(DataFromUser)
+
+		objID, _ := primitive.ObjectIDFromHex(DataFromUser)
+		res, err := col.DeleteOne(ctx, bson.M{"_id": objID})
+
+		fmt.Println(res)
+
+		var responseMessage = map[string]interface{}{}
+
+		if err == nil {
+			responseMessage["status"] = 1
+			responseMessage["text"] = "udało się usunąć post :o"
+			json.NewEncoder(w).Encode(responseMessage)
+		} else {
+			responseMessage["status"] = 0
+			responseMessage["text"] = "Coś poszło masno nie tak"
+			json.NewEncoder(w).Encode(responseMessage)
 		}
+		/*TODO: write some update post functionality when frontend is ready*/
+		//res , err = col.DeleteOne(ctx, bson.M{"_id": })
+
 	}
 }

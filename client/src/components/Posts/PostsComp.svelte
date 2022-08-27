@@ -82,7 +82,7 @@
 	console.log(Posts);
 </script>
 
-<div class="mb-8 bg-black p-0">
+<div class="mb-8 bg-black pt-15">
 	{#if Object.keys(ProfileObj).length !== 0}
 		{#if OpenModalPostForm}
 			<PostForm
