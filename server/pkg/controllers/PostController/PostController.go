@@ -119,7 +119,6 @@ func UpdatePostFromDatabase(col *mongo.Collection, ctx context.Context) http.Han
 }
 func DeletePostFromDatabase(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("test2")
 		w.WriteHeader(http.StatusOK)
 
 		var DataFromUser string
@@ -156,7 +155,28 @@ func DeleteAllPostsOfUser(col *mongo.Collection, ctx context.Context) http.Handl
 
 //Will require admin user status
 func DeleteAllPosts(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request){
-		
+	return func(w http.ResponseWriter, req *http.Request) {
+
+	}
+}
+
+func FetchUserSpecificPosts(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		var UserEmail string
+		json.NewDecoder(req.Body).Decode(&UserEmail)
+		fmt.Println(UserEmail)
+		cursor, err := col.Find(ctx, bson.M{"email": UserEmail})
+		if err != nil {
+			fmt.Println("coś się wywaliło")
+			json.NewEncoder(w).Encode("coś poszło nie tak")
+		} else {
+			var PostInfo []bson.M
+			if (err) = cursor.All(ctx, &PostInfo); err != nil {
+				log.Fatal(err)
+			}
+			json.NewEncoder(w).Encode(PostInfo)
+		}
+
 	}
 }

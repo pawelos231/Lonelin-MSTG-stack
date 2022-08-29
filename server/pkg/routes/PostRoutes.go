@@ -22,6 +22,7 @@ func PostsHandlers(r *mux.Router, col *mongo.Collection, ctx context.Context) *m
 	s.HandleFunc("/PostAPost", PostControllers.PostDataToDataBase(col, ctx)).Methods("POST")
 	s.HandleFunc("/UpdatePost", PostControllers.UpdatePostFromDatabase(col, ctx)).Methods("PUT")
 	s.HandleFunc("/DeletePost", PostControllers.DeletePostFromDatabase(col, ctx)).Methods(http.MethodDelete, http.MethodPost)
+	s.HandleFunc("/FetchSpecificUserPosts", PostControllers.FetchUserSpecificPosts(col, ctx)).Methods(http.MethodPost)
 
 	return r
 
