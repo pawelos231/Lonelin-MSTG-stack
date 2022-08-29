@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { PostDetails } from '../../../interfaces/PostDetails';
 	import { Card, CardText } from 'svelte-materialify';
-	import { onMount } from 'svelte';
-	import { DELETE, POST } from '../../../constants/FetchDataMethods';
+	import { POST } from '../../../constants/FetchDataMethods';
 	export let post: PostDetails | any;
 	export let parsed: any;
 	let Temp: string = '';
@@ -16,13 +15,8 @@
 		status: number;
 		text: string;
 	}
-	let ProfileObj: Object | any;
-	onMount(function () {
-		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
-		console.log(ProfileObj);
-	});
 	const removePostHandler: () => ResponseFromDelete | Promise<void> = async () => {
-		await fetch(`http://localhost:8080/DeletePost?q=${ProfileObj.token}`, {
+		await fetch(`http://localhost:8080/DeletePost?q=${parsed.token}`, {
 			method: POST,
 			body: JSON.stringify(post._id)
 		})

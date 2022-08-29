@@ -147,3 +147,16 @@ func DeletePostFromDatabase(col *mongo.Collection, ctx context.Context) http.Han
 
 	}
 }
+
+func DeleteAllPostsOfUser(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+
+	}
+}
+
+//Will require admin user status
+func DeleteAllPosts(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request){
+		
+	}
+}
