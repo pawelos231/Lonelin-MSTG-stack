@@ -10,4 +10,6 @@
 	};
 </script>
 
-<h1 on:click={() => Onclick()} class="flex justify-center">Kliknij i wyślij requesta</h1>
+<h1 on:click={() => Onclick()} class="flex justify-center text-black absolute top-12 left-96">
+	Kliknij i wyślij requesta
+</h1>
