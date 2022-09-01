@@ -44,3 +44,21 @@ func FetchUserSpecificPosts(col *mongo.Collection, ctx context.Context) http.Han
 
 	}
 }
+
+func likePostByUser(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request){
+
+	}
+}
+
+func CommentOnPostByUser(col *mongo.Collection, ctx context.Context){
+return func(w http.ResponseWriter, req *http.Request){
+
+	}
+}
+
+func LikeCommentByUser(col *mongo.Collection, ctx context.Context){
+	return func(w http.ResponseWriter, req *http.Request){
+	
+		}
+	}
