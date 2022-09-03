@@ -1,30 +1,27 @@
 <script lang="ts">
 	import type { PostDetails } from '../../interfaces/PostDetails';
 	import type { UserInfo } from '../../interfaces/UserInfoLogin';
-	import { PostStore } from '../../store/PostStore';
 	import { onMount } from 'svelte';
 	import Post from './Post/Post.svelte';
 	import { POST } from '../../constants/FetchDataMethods';
-	import { ProgressCircular, MaterialApp } from 'svelte-materialify';
+	import { ProgressCircular } from 'svelte-materialify';
+	import { PostsStoreHandler } from '../../store/PostStore';
 	import PostForm from '../Form/PostForm.svelte';
 	let OpenModalPostForm: boolean = false;
 
 	const OpenModalPostFormHandler = () => {
 		OpenModalPostForm = !OpenModalPostForm;
 	};
-
+	const { PostsFetched, loading, error, get } = PostsStoreHandler('http://localhost:8080/getdata');
 	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
-		const response: Response = await fetch('http://localhost:8080/getdata');
-
-		//delay function to check if laoding state works
-		PostStore.subscribe(async (data) => {
-			data = await response.json();
+		PostsFetched.subscribe(async (data) => {
 			console.log(data);
-			Posts = data;
+			if (Object.keys(data).length !== 0) {
+				Posts = data;
+			}
 		});
 	});
-
 	//get user Profile info
 	let parsed: UserInfo | any = {};
 	onMount(async function () {
@@ -34,7 +31,6 @@
 	let Title: string = '';
 	let Message: string = '';
 	let image: any;
-	let ProfileObj: UserInfo | any = {};
 
 	//dodac tagi, sprawić by kliknięcie na stwórz post to był taki popup,
 
@@ -65,10 +61,11 @@
 		});
 		const response: Response = await fetch('http://localhost:8080/getdata');
 		let data = await response.json();
-		PostStore.update((PrevState) => data);
-		PostStore.subscribe((value) => (Posts = value));
+		PostsFetched.update((PrevState) => data);
+		PostsFetched.subscribe((value) => {
+			Posts = value;
+		});
 
-		console.log(Posts);
 		ResetValuesOfForm();
 		OpenModalPostForm = false;
 	};
@@ -127,22 +124,18 @@
 	-->
 
 	<h1 class="text-5xl font-bold fa text-center bg-black p-9 text-white">Posty</h1>
-	{#if Posts == null}
+	{#if $loading}
 		<div class="m-20" style="display: flex; justify-content: center">
 			<ProgressCircular indeterminate color="pink" size={80} />
 		</div>
 	{/if}
-	{#if Posts?.length == 0}
-		<div>Nic tu nie ma niestety</div>
-	{/if}
-
-	<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
-		{#if Posts !== null}
-			{#each Posts as post}
+	{#key Posts}
+		<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
+			{#each Posts as post, index}
 				{#if post != null}
-					<Post {post} {parsed} />
+					<Post {post} {parsed} {index} />
 				{/if}
 			{/each}
-		{/if}
-	</div>
+		</div>
+	{/key}
 </div>
