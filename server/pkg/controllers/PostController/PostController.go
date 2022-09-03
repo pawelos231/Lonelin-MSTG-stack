@@ -146,5 +146,3 @@ func DeletePostFromDatabase(col *mongo.Collection, ctx context.Context) http.Han
 
 	}
 }
-
-

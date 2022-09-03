@@ -12,15 +12,17 @@ import (
 )
 
 func UserHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux.Router {
-	col := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_USERS)
+	collectionOfUsers := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_USERS)
+
 	r.Use(CommonMiddlewareUser)
-	r.HandleFunc("/createUser", UserController.Register(col, ctx)).Methods("POST")
-	r.HandleFunc("/loginUser", UserController.Login(col, ctx)).Methods("POST")
+	r.HandleFunc("/createUser", UserController.Register(collectionOfUsers, ctx)).Methods("POST")
+	r.HandleFunc("/loginUser", UserController.Login(collectionOfUsers, ctx)).Methods("POST")
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.Use(CommonMiddlewareUser)
 	s.Use(middleware.JwtVerify)
-	s.HandleFunc("/userId", UserController.FetchUserById(col, ctx)).Methods("GET", "OPTIONS")
+	s.HandleFunc("/userId", UserController.FetchUserById(collectionOfUsers, ctx)).Methods("GET", "OPTIONS")
+
 	return r
 }
 
