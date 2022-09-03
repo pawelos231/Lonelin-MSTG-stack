@@ -1,6 +1,6 @@
 import { writable, type Writable } from "svelte/store";
 
-const PostsFetched: Writable<any> = writable({})
+export const PostsFetched: Writable<any> = writable({})
 const loading: Writable<boolean> = writable(false)
 const error: Writable<boolean | any>  = writable(false)
 

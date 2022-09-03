@@ -2,8 +2,7 @@
 	import type { PostDetails } from '../../../interfaces/PostDetails';
 	import { Card, CardText } from 'svelte-materialify';
 	import { POST } from '../../../constants/FetchDataMethods';
-	import { PostsStoreHandler } from '../../../store/PostStore';
-	import Message from './addons/MessageComp.svelte';
+	import { PostsFetched } from '../../../store/PostStore';
 	export let post: PostDetails | any;
 	export let parsed: any;
 	export let index: any;
@@ -21,7 +20,7 @@
 		status: number;
 		text: string;
 	}
-	let messageToReturn: any;
+	PostsFetched.subscribe((item) => console.log(item));
 	const removePostHandler: () => ResponseFromDelete | Promise<void> = async () => {
 		showComp = true;
 		await fetch(`http://localhost:8080/DeletePost?q=${parsed.token}`, {
@@ -29,7 +28,13 @@
 			body: JSON.stringify(post._id)
 		})
 			.then((response) => response.json())
-			.then((data) => (messageToReturn = data));
+			.then((data) => {
+				console.log(data);
+			});
+		PostsFetched.update((data) => {
+			data.splice(index, 1);
+			return data;
+		});
 	};
 </script>
 
@@ -72,6 +77,3 @@
 		</CardText>
 	</div>
 </Card>
-{#if messageToReturn !== undefined && showComp}
-	<Message bind:showComp time={1600} message={messageToReturn} />
-{/if}
