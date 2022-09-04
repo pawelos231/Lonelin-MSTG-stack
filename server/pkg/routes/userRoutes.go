@@ -19,7 +19,6 @@ func UserHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux
 	r.HandleFunc("/loginUser", UserController.Login(collectionOfUsers, ctx)).Methods("POST")
 
 	s := r.PathPrefix("/auth").Subrouter()
-	s.Use(CommonMiddlewareUser)
 	s.Use(middleware.JwtVerify)
 	s.HandleFunc("/userId", UserController.FetchUserById(collectionOfUsers, ctx)).Methods("GET", "OPTIONS")
 

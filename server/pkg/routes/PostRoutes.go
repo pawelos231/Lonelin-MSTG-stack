@@ -17,7 +17,7 @@ func PostsHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mu
 
 	r.Use(mux.CORSMethodMiddleware(r))
 	r.Use(CommonMiddleware)
-	r.HandleFunc("/getdata", PostControllers.GetDataFromDatabase(CollectionOfPosts, ctx)).Methods("GET")
+	r.HandleFunc("/getdata", PostControllers.GetPostsData(CollectionOfPosts, ctx)).Methods("GET")
 	r.HandleFunc("/getSinglePost", PostControllers.GetPostByUniqueId(CollectionOfPosts, ctx)).Methods("GET")
 
 	s := r.PathPrefix("/").Subrouter()

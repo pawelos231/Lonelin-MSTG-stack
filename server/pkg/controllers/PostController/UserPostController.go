@@ -20,10 +20,10 @@ func DeleteAllPostsOfUser(collectionOfPosts *mongo.Collection, ctx context.Conte
 		if err != nil {
 			fmt.Println(err, "coś poszło nie tak")
 			json.NewEncoder(w).Encode("coś poszło nie tak przy usuwaniu postów")
-		} else {
-			fmt.Println(res)
-			json.NewEncoder(w).Encode("udało się usunąć wszystkie twoje posty!")
+			return
 		}
+		fmt.Println(res)
+		json.NewEncoder(w).Encode("udało się usunąć wszystkie twoje posty!")
 
 	}
 }
@@ -44,13 +44,14 @@ func FetchUserSpecificPosts(col *mongo.Collection, ctx context.Context) http.Han
 		if err != nil {
 			fmt.Println("coś się wywaliło")
 			json.NewEncoder(w).Encode("coś poszło nie tak")
-		} else {
-			var PostInfo []bson.M
-			if (err) = cursor.All(ctx, &PostInfo); err != nil {
-				log.Fatal(err)
-			}
-			json.NewEncoder(w).Encode(PostInfo)
+			return
 		}
+
+		var PostInfo []bson.M
+		if (err) = cursor.All(ctx, &PostInfo); err != nil {
+			log.Fatal(err)
+		}
+		json.NewEncoder(w).Encode(PostInfo)
 
 	}
 }
