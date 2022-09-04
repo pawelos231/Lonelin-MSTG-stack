@@ -11,8 +11,19 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func DeleteAllPostsOfUser(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+func DeleteAllPostsOfUser(collectionOfPosts *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+		w.WriteHeader(http.StatusOK)
+		var UserEmail string
+		json.NewDecoder(req.Body).Decode(&UserEmail)
+		res, err := collectionOfPosts.DeleteMany(ctx, bson.M{"email": UserEmail})
+		if err != nil {
+			fmt.Println(err, "coś poszło nie tak")
+			json.NewEncoder(w).Encode("coś poszło nie tak przy usuwaniu postów")
+		} else {
+			fmt.Println(res)
+			json.NewEncoder(w).Encode("udało się usunąć wszystkie twoje posty!")
+		}
 
 	}
 }
@@ -29,7 +40,6 @@ func FetchUserSpecificPosts(col *mongo.Collection, ctx context.Context) http.Han
 		w.WriteHeader(http.StatusOK)
 		var UserEmail string
 		json.NewDecoder(req.Body).Decode(&UserEmail)
-		fmt.Println(UserEmail)
 		cursor, err := col.Find(ctx, bson.M{"email": UserEmail})
 		if err != nil {
 			fmt.Println("coś się wywaliło")

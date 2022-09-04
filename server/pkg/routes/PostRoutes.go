@@ -14,7 +14,7 @@ import (
 func PostsHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux.Router {
 
 	CollectionOfPosts := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_POSTS)
-	
+
 	r.Use(mux.CORSMethodMiddleware(r))
 	r.Use(CommonMiddleware)
 	r.HandleFunc("/getdata", PostControllers.GetDataFromDatabase(CollectionOfPosts, ctx)).Methods("GET")
@@ -27,6 +27,7 @@ func PostsHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mu
 	s.HandleFunc("/UpdatePost", PostControllers.UpdatePostFromDatabase(CollectionOfPosts, ctx)).Methods("PUT")
 	s.HandleFunc("/DeletePost", PostControllers.DeletePostFromDatabase(CollectionOfPosts, ctx)).Methods(http.MethodDelete, http.MethodPost)
 	s.HandleFunc("/FetchSpecificUserPosts", PostControllers.FetchUserSpecificPosts(CollectionOfPosts, ctx)).Methods(http.MethodPost)
+	s.HandleFunc("/DeleteAllPostsOfUser", PostControllers.DeleteAllPostsOfUser(CollectionOfPosts, ctx)).Methods("POST")
 
 	return r
 }

@@ -23,9 +23,9 @@
 		});
 	});
 	//get user Profile info
-	let parsed: UserInfo | any = {};
+	let ParsedUserObject: UserInfo | any = {};
 	onMount(async function () {
-		parsed = JSON.parse(localStorage.getItem('profile') || '{}');
+		ParsedUserObject = JSON.parse(localStorage.getItem('profile') || '{}');
 	});
 
 	let Title: string = '';
@@ -42,7 +42,7 @@
 
 	const LogOut = (): void => {
 		localStorage.clear();
-		parsed = {};
+		ParsedUserObject = {};
 	};
 
 	const HandleOnClick = async (e: any): Promise<void> => {
@@ -55,7 +55,7 @@
 			message: Message,
 			image: image
 		};
-		await fetch(`http://localhost:8080/PostAPost?q=${parsed.token}`, {
+		await fetch(`http://localhost:8080/PostAPost?q=${ParsedUserObject.token}`, {
 			method: POST,
 			body: JSON.stringify(obj)
 		});
@@ -83,7 +83,7 @@
 </script>
 
 <div class="mb-8 bg-black pt-15">
-	{#if Object.keys(parsed).length !== 0}
+	{#if Object.keys(ParsedUserObject).length !== 0}
 		{#if OpenModalPostForm}
 			<PostForm
 				{OpenModalPostFormHandler}
@@ -98,19 +98,19 @@
 		>
 	{/if}
 
-	{#if Object.keys(parsed).length === 0}
+	{#if Object.keys(ParsedUserObject).length === 0}
 		<p class="text-white">Zaloguj się by móc tworzyć quality posty</p>
 	{/if}
 
-	{#key parsed}
-		{#if Object.keys(parsed).length === 0}
+	{#key ParsedUserObject}
+		{#if Object.keys(ParsedUserObject).length === 0}
 			<div
 				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
 			>
 				<a href="/register"> Zaloguj się </a>
 			</div>
 		{/if}
-		{#if Object.keys(parsed).length !== 0}
+		{#if Object.keys(ParsedUserObject).length !== 0}
 			<div
 				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
 				on:click={LogOut}
@@ -133,7 +133,7 @@
 		<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
 			{#each Posts as post, index}
 				{#if post != null}
-					<Post {post} {parsed} {index} />
+					<Post {post} {ParsedUserObject} {index} />
 				{/if}
 			{/each}
 		</div>

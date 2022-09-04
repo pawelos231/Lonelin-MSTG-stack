@@ -4,11 +4,9 @@
 	import { POST } from '../../../constants/FetchDataMethods';
 	import { PostsFetched } from '../../../store/PostStore';
 	export let post: PostDetails | any;
-	export let parsed: any;
+	export let ParsedUserObject: any;
 	export let index: any;
 
-	let showComp: boolean = true;
-	console.log(index);
 	let Temp: string = '';
 	if (post.message.length > 150) {
 		for (let i = 0; i <= 150; i++) {
@@ -20,10 +18,9 @@
 		status: number;
 		text: string;
 	}
-	PostsFetched.subscribe((item) => console.log(item));
+
 	const removePostHandler: () => ResponseFromDelete | Promise<void> = async () => {
-		showComp = true;
-		await fetch(`http://localhost:8080/DeletePost?q=${parsed.token}`, {
+		await fetch(`http://localhost:8080/DeletePost?q=${ParsedUserObject.token}`, {
 			method: POST,
 			body: JSON.stringify(post._id)
 		})
@@ -61,7 +58,7 @@
 					<div class="absolute bottom-3 left-5 text-slate-900">Czytaj więcej</div>
 				{/if}
 			</p>
-			{#if post.email == parsed.email}
+			{#if post.email == ParsedUserObject.email}
 				<div class="flex flex-col absolute right-10 bottom-0 ">
 					<p class="p-2 text-green-800 hover:text-yellow-200 hover:bg-slate-500 rounded">
 						Edytuj Posta
