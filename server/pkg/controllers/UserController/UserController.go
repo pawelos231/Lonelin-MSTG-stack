@@ -1,15 +1,14 @@
 package UserController
 
 import (
+	"BackendGo/pkg/auth"
 	"BackendGo/pkg/models"
 	"BackendGo/pkg/utils"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -60,21 +59,8 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 
 		result, insertErr := col.InsertOne(ctx, user)
 		utils.RegisterInsertErrors(result, insertErr)
-		expirationTime := time.Now().Add(time.Hour * 24)
-		tkToHash := &models.Token{
-			UserID: user.UserId,
-			Name:   user.Name,
-			Email:  user.Email,
-			StandardClaims: &jwt.StandardClaims{
-				ExpiresAt: expirationTime.Unix(),
-			},
-		}
 
-		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tkToHash)
-		tokenString, err := token.SignedString([]byte("secret"))
-		if err != nil {
-			println(err)
-		}
+		tokenString, _ := auth.CreateAccessToken(user)
 
 		var UserInfo = map[string]interface{}{}
 		UserInfo["token"] = tokenString
@@ -123,20 +109,8 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			return
 		}
 
-		expirationTime := time.Now().Add(time.Hour * 24)
-		tkToHash := &models.Token{
-			UserID: UserData.UserId,
-			Name:   UserData.Name,
-			Email:  UserData.Email,
-			StandardClaims: &jwt.StandardClaims{
-				ExpiresAt: expirationTime.Unix(),
-			},
-		}
-		token := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tkToHash)
-		tokenString, err := token.SignedString([]byte("secret"))
-		if err != nil {
-			println(err)
-		}
+		tokenString, _ := auth.CreateAccessToken(user)
+
 		var UserInfo = map[string]interface{}{}
 		UserInfo["token"] = tokenString
 		UserInfo["email"] = UserData.Email
