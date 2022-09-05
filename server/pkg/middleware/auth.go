@@ -4,17 +4,17 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
 func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		fmt.Println("test")
 		tokenValue := req.FormValue("q")
 		tk := jwt.MapClaims{}
 		tkn, err := jwt.ParseWithClaims(tokenValue, tk, func(token *jwt.Token) (interface{}, error) {
-			return []byte("secret"), nil
+			return []byte(os.Getenv("ACCESS_TOKEN_SECRET")), nil
 		})
 		if err != nil {
 			if err == jwt.ErrSignatureInvalid {

@@ -41,19 +41,9 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		user.Password = dash
 		user.UserId = id
 
-		var User bson.M
-		Error := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&User)
-
-		type LoginIfno struct {
-			Text   string `json:"text"`
-			Status int    `json:"status"`
-		}
-
-		if Error == nil {
-			println(User, Error, "udało się znaleźć innego uzytkoniwka o tym mailu")
-			var resp = map[string]interface{}{"status": false, "text": "Podany uzytkownik juz istnieje w bazie"}
-			resp["status"] = 0
-			json.NewEncoder(w).Encode(resp)
+		emailFound, errEmail := auth.FindUserByEmail(col, user, ctx)
+		if errEmail == nil {
+			json.NewEncoder(w).Encode(emailFound)
 			return
 		}
 
@@ -108,7 +98,8 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			json.NewEncoder(w).Encode(ErrorInfo)
 			return
 		}
-
+		RefreshTokenString, _ := auth.CreateRefreshToken(user)
+		auth.SendRefreshToken(w, RefreshTokenString)
 		tokenString, _ := auth.CreateAccessToken(user)
 
 		var UserInfo = map[string]interface{}{}
