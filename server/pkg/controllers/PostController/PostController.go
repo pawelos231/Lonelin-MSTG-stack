@@ -18,6 +18,7 @@ import (
 
 func GetPostsData(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+
 		if req.Method != http.MethodGet {
 			println("You used a wrong method")
 			return

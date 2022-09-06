@@ -27,7 +27,8 @@
 			};
 			await fetch('http://localhost:8080/loginUser', {
 				method: POST,
-				body: JSON.stringify(ObjectLogin)
+				body: JSON.stringify(ObjectLogin),
+				credentials: 'include'
 			})
 				.then((response) => response.json())
 				.then((data) => console.log((SessionData = data)));

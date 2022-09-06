@@ -11,6 +11,7 @@ import (
 
 func JwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		//later place it in a header, i don't know why but cors keeps complaining when i try to set it
 		tokenValue := req.FormValue("q")
 		tk := jwt.MapClaims{}
 		tkn, err := jwt.ParseWithClaims(tokenValue, tk, func(token *jwt.Token) (interface{}, error) {

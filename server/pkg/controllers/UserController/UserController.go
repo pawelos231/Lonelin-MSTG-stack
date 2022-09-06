@@ -36,10 +36,9 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			}
 			json.NewEncoder(w).Encode(err)
 		}
-		id := uuid.New().String()
-		dash := string(password)
-		user.Password = dash
-		user.UserId = id
+
+		user.Password = string(password)
+		user.UserId = uuid.New().String()
 
 		emailFound, errEmail := auth.FindUserByEmail(col, user, ctx)
 		if errEmail == nil {
@@ -49,6 +48,12 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 
 		result, insertErr := col.InsertOne(ctx, user)
 		utils.RegisterInsertErrors(result, insertErr)
+
+		RefreshTokenString, _ := auth.CreateRefreshToken(user)
+		auth.SendRefreshToken(w, RefreshTokenString)
+
+		tokenCookie2, err := req.Cookie("jid")
+		fmt.Println(tokenCookie2, "tokenCookie2")
 
 		tokenString, _ := auth.CreateAccessToken(user)
 
@@ -69,6 +74,7 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 
 func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
+
 		if req.Method != http.MethodPost {
 			json.NewEncoder(w).Encode("U used wrong method")
 			return
@@ -100,6 +106,10 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		}
 		RefreshTokenString, _ := auth.CreateRefreshToken(user)
 		auth.SendRefreshToken(w, RefreshTokenString)
+
+		tokenCookie2, _ := req.Cookie("jid")
+		fmt.Println(tokenCookie2, "tokenCookie2")
+
 		tokenString, _ := auth.CreateAccessToken(user)
 
 		var UserInfo = map[string]interface{}{}
