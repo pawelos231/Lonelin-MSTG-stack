@@ -28,33 +28,30 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 
 		user := &models.User{}
 		json.NewDecoder(req.Body).Decode(&user)
-		var password, err = bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
-		if err != nil {
-			fmt.Println(err)
-			err := ErrorResponse{
-				Err: "Password Encryption  failed",
-			}
-			json.NewEncoder(w).Encode(err)
-		}
+		password, _ := utils.HashValue(bcrypt.MinCost, user)
 
 		user.Password = string(password)
 		user.UserId = uuid.New().String()
 
-		emailFound, errEmail := auth.FindUserByEmail(col, user, ctx)
+		emailFound, errEmail, _ := auth.FindUserByEmail(col, user, ctx)
 		if errEmail == nil {
 			json.NewEncoder(w).Encode(emailFound)
 			return
 		}
 
+		//insert user to database
 		result, insertErr := col.InsertOne(ctx, user)
 		utils.RegisterInsertErrors(result, insertErr)
 
+		//create refresh token and send it via cookie
 		RefreshTokenString, _ := auth.CreateRefreshToken(user)
 		auth.SendRefreshToken(w, RefreshTokenString)
 
-		tokenCookie2, err := req.Cookie("jid")
+		//read cookie of a refresh token for a test
+		tokenCookie2, _ := req.Cookie("jid")
 		fmt.Println(tokenCookie2, "tokenCookie2")
 
+		//create access token and pass it to the user later on
 		tokenString, _ := auth.CreateAccessToken(user)
 
 		var UserInfo = map[string]interface{}{}
@@ -63,8 +60,8 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		UserInfo["name"] = user.Name
 
 		var reponse = map[string]interface{}{"UserInfo": UserInfo}
-		reponse["text"] = "Udało się zalogować !"
-		reponse["status"] = 1
+		reponse["Text"] = "Udało się zalogować !"
+		reponse["Status"] = 1
 
 		json.NewEncoder(w).Encode(reponse)
 
@@ -104,11 +101,11 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			json.NewEncoder(w).Encode(ErrorInfo)
 			return
 		}
+		//create refresh token and send it via cookie
 		RefreshTokenString, _ := auth.CreateRefreshToken(user)
 		auth.SendRefreshToken(w, RefreshTokenString)
 
-		tokenCookie2, _ := req.Cookie("jid")
-		fmt.Println(tokenCookie2, "tokenCookie2")
+		//send access token to the client
 
 		tokenString, _ := auth.CreateAccessToken(user)
 

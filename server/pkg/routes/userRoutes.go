@@ -17,6 +17,7 @@ func UserHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux
 	r.Use(CommonMiddlewareUser)
 	r.HandleFunc("/createUser", UserController.Register(collectionOfUsers, ctx)).Methods("POST")
 	r.HandleFunc("/loginUser", UserController.Login(collectionOfUsers, ctx)).Methods("POST")
+	r.HandleFunc("/refreshToken", UserController.RefreshTokenHandler(collectionOfUsers, ctx)).Methods("POST", "GET")
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.Use(middleware.JwtVerify)

@@ -24,7 +24,7 @@ func initializeToken(user *models.User, expirationTime time.Time) (*jwt.Token, e
 
 func CreateAccessToken(user *models.User) (string, error) {
 
-	expirationTime := time.Now().Add(time.Second * 15)
+	expirationTime := time.Now().Add(time.Minute * 15)
 	token, _ := initializeToken(user, expirationTime)
 	tokenString, err := token.SignedString([]byte(os.Getenv("ACCESS_TOKEN_SECRET")))
 	if err != nil {
