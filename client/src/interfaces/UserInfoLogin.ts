@@ -4,14 +4,14 @@ export interface UserInfo {
     token: string
 }
 export interface ErrorMessage  {
-    text: string
-    status: number
+    Text: string
+    Status: number
 }
 
 export interface StatusLogin {
     UserInfo: UserInfo
-    text: string,
-    status : number,
+    Text: string,
+    Status : number,
 }
 
 export interface UserLoginInfo {

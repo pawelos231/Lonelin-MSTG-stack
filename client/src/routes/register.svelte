@@ -31,36 +31,36 @@
 				.then((response) => response.json())
 				.then((data) => {
 					Info = data;
-					if (Info.status == 1) {
+					if (Info.Status == 1) {
 						localStorage.setItem('profile', JSON.stringify(Info.UserInfo));
 					}
 				});
 			const respons: string = JSON.parse(localStorage.getItem('profile') || '{}');
-			console.log(respons);
+			console.log(Info);
 		}
-		if (Info.status == 1) {
+		if (Info.Status == 1) {
 			location.href = '/';
 		}
 	};
 </script>
 
 {#if Info}
-	{#if Info.status === 1}
+	{#if Info.Status === 1}
 		<p
 			in:fly={{ y: -800, duration: 130, delay: 50 }}
 			out:fly={{ duration: 100, delay: 50 }}
 			class="text-2xl absolute -translate-x-1/2 top-24 left-1/2 text-green-900"
 		>
-			{Info.text}
+			{Info.Text}
 		</p>
 	{/if}
-	{#if Info.status === 0}
+	{#if Info.Status === 0}
 		<p
 			in:fly={{ y: -800, duration: 130, delay: 50 }}
 			out:fly={{ duration: 100, delay: 50 }}
 			class="text-2xl absolute -translate-x-1/2 top-24 left-1/2 text-red-900"
 		>
-			{Info.text}
+			{Info.Text}
 		</p>
 	{/if}
 {/if}

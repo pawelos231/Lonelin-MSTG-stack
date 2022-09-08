@@ -2,11 +2,15 @@
 	// @ts-nocheck
 
 	const Onclick = async () => {
-		const parsed = JSON.parse(localStorage.getItem('profile'));
-		console.log(parsed.token);
-		const res = await fetch(`http://localhost:8080/auth/userId?q=${parsed.token}`);
-		let data = await res.json();
-		console.log(data);
+		const respons: string = JSON.parse(localStorage.getItem('profile') || '{}');
+		console.log(respons);
+		await fetch('http://localhost:8080/refreshToken', {
+			method: 'POST',
+			credentials: 'include',
+			body: JSON.stringify(respons)
+		})
+			.then((res) => res.json())
+			.then((data) => console.log(data.UserInfo.token));
 	};
 </script>
 
