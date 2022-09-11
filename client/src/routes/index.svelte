@@ -12,8 +12,6 @@
 			.then((data: any) => {
 				localStorage.setItem('profile', JSON.stringify(data.UserInfo));
 			});
-		respons = JSON.parse(localStorage.getItem('profile') || '{}');
-		console.log(respons.token);
 	});
 </script>
 

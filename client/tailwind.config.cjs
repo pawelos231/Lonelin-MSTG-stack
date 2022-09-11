@@ -9,10 +9,14 @@ module.exports = {
 			},
 			rotate: {
 				360: '360deg'
+			},
+			height: {
+				95: '95%'
+			},
+			width: {
+				90: '90%'
 			}
-		},
-		
-		
+		}
 	},
 	plugins: [
 		function ({ addVariant }) {

@@ -72,6 +72,7 @@
 
 	//select photo for your potst
 	const onFileSelected: (e: any) => void = (e: any) => {
+		//later change it, and add possibilty to add up to 10 images
 		let ImageFromSelect: any = e.target.files[0];
 		let reader: FileReader = new FileReader();
 		console.log(ImageFromSelect);

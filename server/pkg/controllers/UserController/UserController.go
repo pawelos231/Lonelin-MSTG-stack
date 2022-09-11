@@ -2,6 +2,7 @@ package UserController
 
 import (
 	"BackendGo/pkg/auth"
+	consts "BackendGo/pkg/constants"
 	"BackendGo/pkg/models"
 	"BackendGo/pkg/utils"
 	"context"
@@ -26,12 +27,13 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			return
 		}
 
+		//decode data from client, hash password and attach the necesary informations about user to a query to database
 		user := &models.User{}
 		json.NewDecoder(req.Body).Decode(&user)
 		password, _ := utils.HashValue(bcrypt.MinCost, user)
-
 		user.Password = string(password)
 		user.UserId = uuid.New().String()
+		user.Role = consts.USER
 
 		emailFound, errEmail, _ := auth.FindUserByEmail(col, user, ctx)
 		if errEmail == nil {
@@ -46,10 +48,6 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		//create refresh token and send it via cookie
 		RefreshTokenString, _ := auth.CreateRefreshToken(user)
 		auth.SendRefreshToken(w, RefreshTokenString)
-
-		//read cookie of a refresh token for a test
-		tokenCookie2, _ := req.Cookie("jid")
-		fmt.Println(tokenCookie2, "tokenCookie2")
 
 		//create access token and pass it to the user later on
 		tokenString, _ := auth.CreateAccessToken(user)
@@ -81,7 +79,6 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		json.NewDecoder(req.Body).Decode(&user)
 		var UserData = &models.User{}
 		Info := col.FindOne(ctx, bson.M{"email": user.Email}).Decode(&UserData)
-		fmt.Println(Info)
 
 		if Info != nil {
 			fmt.Println("nie ma takiego typa", Info)
@@ -92,13 +89,8 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			return
 		}
 
-		errorPass := bcrypt.CompareHashAndPassword([]byte(UserData.Password), []byte(user.Password))
-
-		if errorPass != nil && errorPass == bcrypt.ErrMismatchedHashAndPassword {
-			var ErrorInfo = map[string]interface{}{}
-			ErrorInfo["status"] = 0
-			ErrorInfo["text"] = "Niepoprawne Hasło"
-			json.NewEncoder(w).Encode(ErrorInfo)
+		ErrorMessage := utils.CompareHashAndPassword(UserData.Password, user.Password, w)
+		if ErrorMessage != nil {
 			return
 		}
 		//create refresh token and send it via cookie
@@ -106,7 +98,6 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		auth.SendRefreshToken(w, RefreshTokenString)
 
 		//send access token to the client
-
 		tokenString, _ := auth.CreateAccessToken(user)
 
 		var UserInfo = map[string]interface{}{}

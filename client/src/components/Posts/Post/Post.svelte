@@ -3,9 +3,16 @@
 	import { Card, CardText } from 'svelte-materialify';
 	import { POST } from '../../../constants/FetchDataMethods';
 	import { PostsFetched } from '../../../store/PostStore';
+	import EditPost from './EditPostModal/EditPost.svelte';
 	export let post: PostDetails | any;
 	export let ParsedUserObject: any;
 	export let index: any;
+
+	//modal Edit
+	let OpenModalEdit: boolean = false;
+	const OpenModalEditHandler: () => void = () => {
+		OpenModalEdit = !OpenModalEdit;
+	};
 
 	let Temp: string = '';
 	if (post.message.length > 150) {
@@ -51,16 +58,21 @@
 			<p class="text-gray-600">
 				{#if post.message.length > 150}
 					{Temp}
-					<div class="absolute bottom-3 left-5 text-slate-900">Czytaj więcej</div>
+
+					<div class=" pt-5 absolute bottom-2 left-5 text-slate-900">Czytaj więcej</div>
 				{/if}
 				{#if post.message.length < 150}
 					{post.message}
+
 					<div class="absolute bottom-3 left-5 text-slate-900">Czytaj więcej</div>
 				{/if}
 			</p>
 			{#if post.email == ParsedUserObject.email}
-				<div class="flex flex-col absolute right-10 bottom-0 ">
-					<p class="p-2 text-green-800 hover:text-yellow-200 hover:bg-slate-500 rounded">
+				<div class="flex flex-col absolute right-10 bottom-0 bg-slate-300 p-2 ">
+					<p
+						on:click={OpenModalEditHandler}
+						class="p-2 text-green-800 hover:text-yellow-200 hover:bg-slate-500 rounded"
+					>
 						Edytuj Posta
 					</p>
 					<p
@@ -74,3 +86,7 @@
 		</CardText>
 	</div>
 </Card>
+
+{#if OpenModalEdit}
+	<EditPost {OpenModalEditHandler} />
+{/if}

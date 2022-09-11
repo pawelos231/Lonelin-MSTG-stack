@@ -25,6 +25,7 @@ func RefreshTokenHandler(col *mongo.Collection, ctx context.Context) http.Handle
 		value := tokenCookie2.Value
 		fmt.Println(value)
 		if errCookie != nil {
+			fmt.Println(errCookie)
 			json.NewEncoder(w).Encode("coś poszło nie tak")
 		}
 
