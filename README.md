@@ -9,4 +9,6 @@ this tech stack contains:
 - M - mongodb as a database  
 
 
-Project will include CRUD funcionalites, it will cover both frontend and backend, project will resemble reddit, instead of rest API it will feature grapghql, it will also contain 3D games, created in three.js and ammo.js, it any idea pops into my head it will be featured in this project i also hope to create some rust based functionalities and many more. 
+Project will include CRUD funcionalites, it will cover both frontend and backend, project will resemble reddit, instead of rest API it will feature grapghql, it will also contain 3D games, created in three.js and ammo.js, it any idea pops into my head it will be featured in this project i also hope to create some rust based functionalities and many more.
+
+For some time the .env file will be present in the folder structure, beacuse it does not contain any vulnerable data, as soon as the project will require this values to be completly private, .env file will not longer be present and all of values inside of it will be replaced
