@@ -15,7 +15,6 @@
 		  }
 	> {
 		const response: Response = await fetch(`http://localhost:8080/getSinglePost?q=${params.slug}`);
-		console.log(response);
 		if (response.ok) {
 			return {
 				status: response.status,
@@ -34,11 +33,6 @@
 <script lang="ts">
 	import PostDetails from '../../components/PostDetails/PostDetails.svelte';
 	export let post: any;
-	console.log(post);
 </script>
-
-<svelte:head>
-	<title>{post.title}</title>
-</svelte:head>
 
 <PostDetails {post} />

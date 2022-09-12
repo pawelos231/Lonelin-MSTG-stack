@@ -15,7 +15,7 @@
 </script>
 
 <main>
-	<nav class="h-[calc(100vh-40px)] absolute opacity-90 z-10 top-10">
+	<nav class="h-[calc(100vh-60px)] absolute opacity-90 z-10 top-14">
 		<ul class="flex flex-col gap-5 bg-gray-800 w-52 min-h-full pt-5">
 			{#each dataOfNavbarTextElements as { text, link }}
 				<LiElement value={text} {link} />

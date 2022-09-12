@@ -5,7 +5,7 @@
 	}
 </script>
 
-<nav class="w-full bg-slate-600 p-3 z-20 fixed">
+<nav class="w-full bg-neutral-900 p-5 z-20 fixed text-white">
 	<ul
 		class=" flex items-center  justify-end gap-12 mr-11
 		child:transition duration-150 cursor-pointer 
@@ -16,6 +16,13 @@
 				<a href="/user"> {ProfileObj.name}</a>
 			</li>
 		{/if}
+		<li class="absolute left-1/2 -translate-x-1/2 w-1/4">
+			<input
+				class="bg-neutral-700 w-full p-2 rounded-sm text-white"
+				type="text"
+				placeholder="Szukaj po Lonlinie"
+			/>
+		</li>
 		<li>
 			<a href="/"> Główna </a>
 		</li>
