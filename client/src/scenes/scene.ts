@@ -124,7 +124,7 @@ export const createScene = (el: any) => {
 	  const elapsedTime: number = clock.getElapsedTime();
 	
 	  arrOfParticles.forEach((item: itemsParticles, i: number) => {
-		item.Particle.position.z = item.Particle.position.z + 0.1055;
+		item.Particle.position.z = item.Particle.position.z + 0.105;
 		item.material.emissive.r = 1 * Math.abs(item.Particle.position.z);
 		item.material.emissive.g = 3.92 * Math.abs(1 / item.Particle.position.z);
 		item.material.emissive.b = 3.92 * Math.abs(1 / item.Particle.position.z);
