@@ -34,10 +34,6 @@
 				.then((data) => console.log((SessionData = data)));
 		}
 		localStorage.setItem('profile', JSON.stringify(SessionData.UserInfo));
-		console.log(SessionData.UserInfo);
-		let ProfileObj: any;
-		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
-		console.log(ProfileObj);
 		if (SessionData.status == 1) {
 			location.href = '/';
 		}

@@ -38,7 +38,7 @@ func CreateRefreshToken(user *models.User) (string, error) {
 	expirationTime := time.Now().Add(time.Hour * 500)
 
 	token, _ := initializeToken(user, expirationTime)
-	tokenString, err := token.SignedString([]byte(os.Getenv("ACCESS_TOKEN_SECRET")))
+	tokenString, err := token.SignedString([]byte(os.Getenv("REFRESH_TOKEN_SECRET")))
 	if err != nil {
 		return "", fmt.Errorf("couldnt sign the token")
 	}

@@ -33,7 +33,6 @@ func RefreshTokenHandler(col *mongo.Collection, ctx context.Context) http.Handle
 		refreshToken, errParser := jwt.ParseWithClaims(value, tkClaims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("REFRESH_TOKEN_SECRET")), nil
 		})
-
 		if errParser != nil && refreshToken == nil {
 			if errParser == jwt.ErrSignatureInvalid {
 				fmt.Println(errParser)

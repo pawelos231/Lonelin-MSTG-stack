@@ -6,9 +6,3 @@ const (
 	COLLECTION_POSTS = "PostInfos"
 	COLLECTION_USERS = "UserTable"
 )
-
-const (
-	USER      = "User"
-	MODERATOR = "Moderator"
-	ADMIN     = "Admin"
-)
