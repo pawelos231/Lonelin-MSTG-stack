@@ -3,10 +3,10 @@
 	import PublishButton from './PublishComment/PublishButton.svelte';
 
 	let RenderComps: boolean = false;
-	const OnFocusComments = () => {
+	const OnFocusComments: () => void = () => {
 		RenderComps = true;
 	};
-	const OutFocusComments = () => {
+	const OutFocusComments: () => void = () => {
 		RenderComps = false;
 	};
 </script>
