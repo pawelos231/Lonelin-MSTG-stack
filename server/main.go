@@ -39,6 +39,7 @@ func main() {
 	router := mux.NewRouter()
 	http.Handle("/user", Routes.UserHandlers(router, ctx, client))
 	http.Handle("/post", Routes.PostsHandlers(router, ctx, client))
+	http.Handle("/comments", Routes.CommentHandlers(router, ctx, client))
 
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), handlers.CORS(corsObj, credentials)(router)))
 }

@@ -62,14 +62,6 @@ func likePostByUser(col *mongo.Collection, ctx context.Context) http.HandlerFunc
 	}
 }
 
-func CommentOnPostByUser(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
 
-	}
-}
 
-func LikeCommentOnPostByUser(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, req *http.Request) {
 
-	}
-}
