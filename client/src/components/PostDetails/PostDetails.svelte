@@ -31,5 +31,5 @@
 		<ModalImage src={post.image} {HandleOnClickModal} />
 	{/if}
 
-	<Comments />
+	<Comments {post} />
 </div>

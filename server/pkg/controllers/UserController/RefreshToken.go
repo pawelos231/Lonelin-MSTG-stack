@@ -23,7 +23,6 @@ func RefreshTokenHandler(col *mongo.Collection, ctx context.Context) http.Handle
 		fmt.Println(tokenCookie2.Value, "tokenCookie2")
 
 		value := tokenCookie2.Value
-		fmt.Println(value)
 		if errCookie != nil {
 			fmt.Println(errCookie)
 			json.NewEncoder(w).Encode("coś poszło nie tak")
@@ -48,11 +47,10 @@ func RefreshTokenHandler(col *mongo.Collection, ctx context.Context) http.Handle
 		}
 
 		_, _, User := auth.FindUserByEmail(col, user, ctx)
-		fmt.Println(User)
 
-		RefreshTokenString, _ := auth.CreateRefreshToken(user)
+		RefreshTokenString, _ := auth.CreateRefreshToken(User)
 		auth.SendRefreshToken(w, RefreshTokenString)
-		tokenString, _ := auth.CreateAccessToken(user)
+		tokenString, _ := auth.CreateAccessToken(User)
 
 		var UserInfo = map[string]interface{}{}
 		UserInfo["token"] = tokenString

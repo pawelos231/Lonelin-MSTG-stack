@@ -14,7 +14,7 @@ import (
 
 func CommentHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *mux.Router {
 
-	CollectionOfPosts := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_POSTS)
+	CollectionOfPosts := client.Database(consts.DATABASE_NAME).Collection(consts.COLLECTION_COMMENTS)
 
 	r.Use(mux.CORSMethodMiddleware(r))
 	r.Use(utils.CommonMiddleware)

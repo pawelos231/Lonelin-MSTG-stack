@@ -31,7 +31,6 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		user := &models.User{}
 		json.NewDecoder(req.Body).Decode(&user)
 		password, _ := utils.HashValue(bcrypt.MinCost, user)
-		user.Password = string(password)
 		user.UserId = uuid.New().String()
 		user.Role = consts.USER
 
@@ -48,6 +47,7 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		//create refresh token and send it via cookie
 		RefreshTokenString, _ := auth.CreateRefreshToken(user)
 		auth.SendRefreshToken(w, RefreshTokenString)
+		user.Password = string(password)
 
 		//create access token and pass it to the user later on
 		tokenString, _ := auth.CreateAccessToken(user)

@@ -16,9 +16,10 @@ type Comment struct {
 	UserId      string `json:"userid"`
 	CreatedAt   string `json:"createdat"`
 	PostId      string `json:"postid"`
-	Likes       string `json:"likes"`
+	Likes       int    `json:"likes"`
 	ParentId    string `json:"parentid"`
-	NestedLevel string `json:"nestedlevel"`
-	Repondsto   string `json:"respondsto"`
-	UpdatedAt   string `json:"updateat"`
+	NestedLevel int    `json:"nestedlevel"`
+	Respondto   string `json:"respondto"`
+	UpdatedAt   string `json:"updatedat"`
+	Comment     string `json:"comment"`
 }

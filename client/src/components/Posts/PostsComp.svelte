@@ -12,22 +12,22 @@
 	const OpenModalPostFormHandler = () => {
 		OpenModalPostForm = !OpenModalPostForm;
 	};
+
 	const { PostsFetched, loading, error, get } = PostsStoreHandler('http://localhost:8080/getdata');
 	let Posts: PostDetails[] | any = [];
 	onMount(async function () {
-		PostsFetched.subscribe(async (data) => {
-			console.log(data);
+		PostsFetched.subscribe(async (data: any) => {
 			if (Object.keys(data).length !== 0) {
 				Posts = data;
 			}
 		});
 	});
+
 	//get user Profile info
 	let ParsedUserObject: UserInfo | any = {};
 	onMount(async function () {
 		ParsedUserObject = JSON.parse(localStorage.getItem('profile') || '{}');
 	});
-
 	let Title: string = '';
 	let Message: string = '';
 	let image: any;
@@ -55,10 +55,12 @@
 			message: Message,
 			image: image
 		};
+
 		await fetch(`http://localhost:8080/PostAPost?q=${ParsedUserObject.token}`, {
 			method: POST,
 			body: JSON.stringify(obj)
 		});
+
 		const response: Response = await fetch('http://localhost:8080/getdata');
 		let data = await response.json();
 		PostsFetched.update((PrevState) => data);
@@ -94,7 +96,7 @@
 				{onFileSelected}
 			/>
 		{/if}
-		<button class="absolute w-48 bg-slate-400 p-3 m-5" on:click={OpenModalPostFormHandler}
+		<button class="absolute w-48 bg-slate-400 p-3 m-5 z-10" on:click={OpenModalPostFormHandler}
 			>Stwórz Post</button
 		>
 	{/if}
@@ -113,7 +115,7 @@
 		{/if}
 		{#if Object.keys(ParsedUserObject).length !== 0}
 			<div
-				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
+				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white z-20"
 				on:click={LogOut}
 			>
 				Wyloguj się

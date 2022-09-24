@@ -7,8 +7,8 @@
 </script>
 
 <div
-	class="w-screen h-screen fixed z-10 backdrop-blur-md flex justify-center
-items-center  "
+	class="w-screen h-screen fixed  backdrop-blur-md flex justify-center
+items-center z-20  "
 >
 	<div
 		on:click={OpenModalPostFormHandler}
@@ -45,7 +45,7 @@ items-center  "
 			on:change={(e) => onFileSelected(e)}
 		/>
 		<button
-			class="bg-slate-800 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white"
+			class=" bg-slate-800 rounded p-3 cursor-pointer m-3 transition-all ease-in-out duration-300 hover:bg-black hover:text-white "
 			type="submit"
 		>
 			Stwórz post
