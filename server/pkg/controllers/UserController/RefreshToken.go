@@ -29,18 +29,19 @@ func RefreshTokenHandler(col *mongo.Collection, ctx context.Context) http.Handle
 		}
 
 		tkClaims := jwt.MapClaims{}
-		refreshToken, errParser := jwt.ParseWithClaims(value, tkClaims, func(token *jwt.Token) (interface{}, error) {
+		refreshToken, errParsed := jwt.ParseWithClaims(value, tkClaims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(os.Getenv("REFRESH_TOKEN_SECRET")), nil
 		})
-		if errParser != nil && refreshToken == nil {
-			if errParser == jwt.ErrSignatureInvalid {
-				fmt.Println(errParser)
+		//Pass it to utils later beacuse it duplicates
+		if errParsed != nil && refreshToken == nil {
+			if errParsed == jwt.ErrSignatureInvalid {
+				fmt.Println(errParsed)
 				json.NewEncoder(w).Encode("invalid token")
 				w.WriteHeader(http.StatusUnauthorized)
 				return
 			}
 			w.WriteHeader(http.StatusBadRequest)
-			fmt.Println(errParser)
+			fmt.Println(errParsed)
 			json.NewEncoder(w).Encode("zły token")
 			println("blad")
 			return
