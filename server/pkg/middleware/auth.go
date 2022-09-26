@@ -15,11 +15,12 @@ func JwtVerify(next http.Handler) http.Handler {
 		//later place it in a header, i don't know why but cors keeps complaining when i try to set it
 
 		//MOVE THIS ENTIRE THING TO SOME DIFFERENT FUNCTION CAUSE IT DUPLICATES IN USERCONTROLLER/REFRESHTOKEN
-
+		for _, c := range req.Cookies() {
+			fmt.Println(c, "chuj")
+		}
 		tokenCookie2, errCookie := req.Cookie("jid")
 		if errCookie != nil {
 			fmt.Println(errCookie)
-			json.NewEncoder(w).Encode("coś poszło nie tak")
 			return
 		}
 

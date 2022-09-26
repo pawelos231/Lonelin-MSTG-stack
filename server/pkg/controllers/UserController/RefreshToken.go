@@ -50,7 +50,7 @@ func RefreshTokenHandler(col *mongo.Collection, ctx context.Context) http.Handle
 		_, _, User := auth.FindUserByEmail(col, user, ctx)
 
 		RefreshTokenString, _ := auth.CreateRefreshToken(User)
-		auth.SendRefreshToken(w, RefreshTokenString)
+		auth.SendRefreshToken(w, req, RefreshTokenString)
 		tokenString, _ := auth.CreateAccessToken(User)
 
 		var UserInfo = map[string]interface{}{}

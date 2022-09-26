@@ -58,6 +58,7 @@
 
 		await fetch(`http://localhost:8080/PostAPost?q=${ParsedUserObject.token}`, {
 			method: POST,
+			credentials: 'include',
 			body: JSON.stringify(obj)
 		});
 

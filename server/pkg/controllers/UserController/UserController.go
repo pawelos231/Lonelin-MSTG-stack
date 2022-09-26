@@ -46,7 +46,7 @@ func Register(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 
 		//create refresh token and send it via cookie
 		RefreshTokenString, _ := auth.CreateRefreshToken(user)
-		auth.SendRefreshToken(w, RefreshTokenString)
+		auth.SendRefreshToken(w, req, RefreshTokenString)
 		user.Password = string(password)
 
 		//create access token and pass it to the user later on
@@ -95,18 +95,20 @@ func Login(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 		}
 		//create refresh token and send it via cookie
 		RefreshTokenString, _ := auth.CreateRefreshToken(user)
-		auth.SendRefreshToken(w, RefreshTokenString)
+		auth.SendRefreshToken(w, req, RefreshTokenString)
 
 		//send access token to the client
 		tokenString, _ := auth.CreateAccessToken(user)
 
 		var UserInfo = map[string]interface{}{}
+
 		UserInfo["token"] = tokenString
 		UserInfo["email"] = UserData.Email
 		UserInfo["name"] = UserData.Name
 		var reponse = map[string]interface{}{"UserInfo": UserInfo}
 		reponse["text"] = "Udało się zalogować !"
 		reponse["status"] = 1
+
 		json.NewEncoder(w).Encode(reponse)
 
 	}
