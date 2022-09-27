@@ -24,7 +24,6 @@ func ValidateToken(w http.ResponseWriter, req *http.Request) bool {
 	refreshToken, errParsed := jwt.ParseWithClaims(value, tkClaims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(os.Getenv("REFRESH_TOKEN_SECRET")), nil
 	})
-	//Pass it to utils later beacuse it duplicates
 	if errParsed != nil || refreshToken == nil {
 		if errParsed == jwt.ErrSignatureInvalid {
 			json.NewEncoder(w).Encode("invalid token")

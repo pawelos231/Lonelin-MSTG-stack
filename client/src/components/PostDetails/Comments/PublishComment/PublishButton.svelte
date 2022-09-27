@@ -1,37 +1,40 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { POST } from '../../../../constants/FetchDataMethods';
+	import type { CommentPostDetails } from '../../../../interfaces/CommentsInterfaces/CommentPostinterface';
 	let profile: any;
-	export let postDetailsId;
+	export let postDetailsId: any;
 	export let valueOfComment: string;
 
 	onMount(() => {
 		profile = JSON.parse(localStorage.getItem('profile') || '{}');
 	});
 	const SendComment: (e: any) => Promise<void> = async (e: any) => {
-		var today: any = new Date();
+		var today: Date = new Date();
 		let date: string = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 
 		//to change
 		let Likes: number = 0;
-		let ParentId: string = 'fdsfdsfds';
+		let ParentId: string = 'Nothing here';
 		let NestedLevel: number = 100;
-		let Repondsto: string = 'fdsfdsfds';
-		let UpdatedAt: string = 'fdsfdsfds';
+		let Repondsto: string = 'Nothing here, test value';
+		let UpdatedAt: string = 'Nothing here, test value';
 
 		//make interface for comments
-		const PassObject: Object = {
+		const PassObject: CommentPostDetails = {
 			likes: Likes,
 			parentId: ParentId,
 			nestedlevel: NestedLevel,
 			respondto: Repondsto,
 			updatedat: UpdatedAt,
 			comment: valueOfComment,
-			createdat: date
+			createdat: date,
+			postid: postDetailsId
 		};
 
 		await fetch(`http://localhost:8080/comments/CommentOnPostByUser?q=${profile.token}`, {
 			method: POST,
+			credentials: 'include',
 			body: JSON.stringify(PassObject)
 		})
 			.then((res) => res.json())

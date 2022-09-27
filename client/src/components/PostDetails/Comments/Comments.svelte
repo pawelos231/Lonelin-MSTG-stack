@@ -1,10 +1,17 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { POST } from '../../../constants/FetchDataMethods';
 	import UserComments from './CommentsByUsers/UserComments.svelte';
 	import CancelComment from './PublishComment/CancelComment.svelte';
 	import PublishButton from './PublishComment/PublishButton.svelte';
+	import type {
+		AllDataComments,
+		CommentPostDetails
+	} from '../../../interfaces/CommentsInterfaces/CommentPostinterface';
 	let valueOfComment: string = '';
 	export let post: any;
 
+	let CommentDetails: CommentPostDetails[] & AllDataComments[] = [];
 	let RenderComps: boolean = false;
 	const OnFocusComments: () => void = () => {
 		RenderComps = true;
@@ -12,6 +19,15 @@
 	const OutFocusComments: () => void = () => {
 		RenderComps = false;
 	};
+	onMount(async function () {
+		//GetAllCommentsOfGivenPosts
+		await fetch(`http://localhost:8080/GetAllCommentsOfGivenPosts`, {
+			method: POST,
+			body: JSON.stringify(post._id)
+		})
+			.then((res) => res.json())
+			.then((data) => (CommentDetails = data));
+	});
 </script>
 
 <section class="w-full flex justify-center flex-col">
@@ -38,5 +54,7 @@
 			</div>
 		</div>
 	</div>
-	<UserComments />
+	{#key CommentDetails}
+		<UserComments {CommentDetails} />
+	{/key}
 </section>

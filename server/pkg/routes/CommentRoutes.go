@@ -19,7 +19,12 @@ func CommentHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *
 	r.Use(mux.CORSMethodMiddleware(r))
 	r.Use(utils.CommonMiddleware)
 
+	//later create subrouter for this endopoint
+	r.HandleFunc("/GetAllCommentsOfGivenPosts", CommentsControllers.GetAllCommentsOfGivenPost(CollectionOfPosts, ctx)).Methods(http.MethodPost)
+
 	c := r.PathPrefix("/comments").Subrouter()
+
+	//Apply middleware to controllers that need user aut
 	c.Use(middleware.JwtVerify)
 
 	c.HandleFunc("/CommentOnPostByUser", CommentsControllers.CommentOnPostByUser(CollectionOfPosts, ctx)).Methods(http.MethodPost)

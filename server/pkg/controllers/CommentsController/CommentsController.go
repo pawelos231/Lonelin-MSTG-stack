@@ -6,11 +6,36 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
+
+func GetAllCommentsOfGivenPost(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
+	return func(w http.ResponseWriter, req *http.Request) {
+
+		var PostId string
+		json.NewDecoder(req.Body).Decode(&PostId)
+		fmt.Println(PostId)
+		cursor, err := col.Find(ctx, bson.M{"postid": PostId})
+
+		if err != nil {
+			fmt.Println("find error")
+			return
+		}
+		var CommentData []bson.M
+
+		if err = cursor.All(ctx, &CommentData); err != nil {
+			log.Fatal(err)
+		}
+
+		json.NewEncoder(w).Encode(CommentData)
+
+	}
+}
 
 func CommentOnPostByUser(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {

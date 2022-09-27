@@ -23,7 +23,9 @@ func GetPostsData(col *mongo.Collection, ctx context.Context) http.HandlerFunc {
 			println("You used a wrong method")
 			return
 		}
+		
 		w.WriteHeader(http.StatusOK)
+
 		cursor, err := col.Find(ctx, bson.M{})
 		if err != nil {
 			fmt.Println("Find errror", err)
