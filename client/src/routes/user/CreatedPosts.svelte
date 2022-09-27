@@ -20,6 +20,7 @@
 		const FetchUselessData: () => Promise<void> = async () => {
 			await fetch(`http://localhost:8080/FetchSpecificUserPosts?q=${ProfileObj.token}`, {
 				method: 'POST',
+				credentials: 'include',
 				body: JSON.stringify(ProfileObj.email)
 			})
 				.then((res) => res.json())
@@ -34,6 +35,7 @@
 		showComp = true;
 		await fetch(`http://localhost:8080/DeleteAllPostsOfUser?q=${ProfileObj.token}`, {
 			method: 'POST',
+			credentials: 'include',
 			body: JSON.stringify(ProfileObj.email)
 		})
 			.then((res) => res.json())
