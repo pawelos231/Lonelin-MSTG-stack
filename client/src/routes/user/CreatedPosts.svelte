@@ -5,33 +5,14 @@
 	import { createScene } from '../../scenes/scene';
 	import type { PostDetails } from '../../interfaces/PostDetails';
 	import MessageDeleteAllPostsOfUser from '../../components/addons/UserProfile/TemporaryComponents/MessageDeleteAllPostsOfUser.svelte';
+
 	let Posts: PostDetails | any = [];
 	let ProfileObj: UserInfo | any;
-	let messageFromDeleteAllPosts: string;
-	let showComp = true;
-	onMount(async function () {
-		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
+	let messageFromDeleteAllPosts: string = '';
+	let showComp: boolean = true;
 
-		if (Object.keys(ProfileObj).length == 0) {
-			console.log('NIEZALOGOWANY');
-			location.href = '/';
-		}
-		console.log(ProfileObj.email);
-		const FetchUselessData: () => Promise<void> = async () => {
-			await fetch(`http://localhost:8080/FetchSpecificUserPosts?q=${ProfileObj.token}`, {
-				method: 'POST',
-				credentials: 'include',
-				body: JSON.stringify(ProfileObj.email)
-			})
-				.then((res) => res.json())
-				.then((data) => {
-					Posts = data;
-				});
-		};
-		FetchUselessData();
-	});
 	let el: any;
-	const deleteAllPostsOfUser = async () => {
+	const deleteAllPostsOfUser: () => Promise<void> = async () => {
 		showComp = true;
 		await fetch(`http://localhost:8080/DeleteAllPostsOfUser?q=${ProfileObj.token}`, {
 			method: 'POST',
@@ -44,6 +25,29 @@
 			});
 		Posts = [];
 	};
+
+	onMount(async function () {
+		ProfileObj = JSON.parse(localStorage.getItem('profile') || '{}');
+
+		if (Object.keys(ProfileObj).length == 0) {
+			console.log('NIEZALOGOWANY');
+			location.href = '/';
+		}
+
+		const FetchSpecificUserPosts: () => Promise<void> = async () => {
+			await fetch(`http://localhost:8080/FetchSpecificUserPosts?q=${ProfileObj.token}`, {
+				method: 'POST',
+				credentials: 'include',
+				body: JSON.stringify(ProfileObj.email)
+			})
+				.then((res) => res.json())
+				.then((data) => {
+					Posts = data;
+				});
+		};
+		FetchSpecificUserPosts();
+	});
+
 	onMount(() => {
 		createScene(el);
 	});
