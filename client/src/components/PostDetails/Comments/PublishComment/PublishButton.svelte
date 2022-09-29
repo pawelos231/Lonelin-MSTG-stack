@@ -3,6 +3,7 @@
 	import { POST } from '../../../../constants/FetchDataMethods';
 	import type { CommentPostDetails } from '../../../../interfaces/CommentsInterfaces/CommentPostinterface';
 	let profile: any;
+	
 	export let postDetailsId: any;
 	export let valueOfComment: string;
 	export let OutFocusComments: any;
