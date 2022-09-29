@@ -9,7 +9,7 @@
 	export let post: PostDetails | any;
 </script>
 
-<div class="absolute bg-neutral-700 text-white min-h-screen w-screen">
+<div class="absolute bg-neutral-700 text-white min-h-[150vh] w-screen">
 	<h1 class="flex justify-center text-5xl mt-20 m-8 skew-x-3">{post.title}</h1>
 	<div class="flex flex-col items-center">
 		<div class="w-1/2 pb-7 text-left">

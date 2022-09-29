@@ -5,6 +5,7 @@
 	let profile: any;
 	export let postDetailsId: any;
 	export let valueOfComment: string;
+	export let OutFocusComments: any;
 
 	onMount(() => {
 		profile = JSON.parse(localStorage.getItem('profile') || '{}');
@@ -31,14 +32,16 @@
 			createdat: date,
 			postid: postDetailsId
 		};
-
-		await fetch(`http://localhost:8080/comments/CommentOnPostByUser?q=${profile.token}`, {
-			method: POST,
-			credentials: 'include',
-			body: JSON.stringify(PassObject)
-		})
-			.then((res) => res.json())
-			.then((data) => console.log(data));
+		OutFocusComments();
+		if (valueOfComment != '') {
+			await fetch(`http://localhost:8080/comments/CommentOnPostByUser?q=${profile.token}`, {
+				method: POST,
+				credentials: 'include',
+				body: JSON.stringify(PassObject)
+			})
+				.then((res) => res.json())
+				.then((data) => console.log(data));
+		}
 	};
 </script>
 

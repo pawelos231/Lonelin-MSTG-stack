@@ -12,7 +12,7 @@
 	export let post: any;
 
 	let CommentDetails: CommentPostDetails[] & AllDataComments[] = [];
-	let RenderComps: boolean = false;
+	let RenderComps = false;
 	const OnFocusComments: () => void = () => {
 		RenderComps = true;
 	};
@@ -45,12 +45,14 @@
 			</div>
 
 			<div class="relative flex gap-8 mt-2 w-[70%] justify-end">
-				{#if RenderComps}
-					{#key valueOfComment}
-						<CancelComment {OutFocusComments} />
-						<PublishButton postDetailsId={post._id} {valueOfComment} />
-					{/key}
-				{/if}
+				{#key RenderComps}
+					{#if RenderComps}
+						{#key valueOfComment}
+							<CancelComment {OutFocusComments} />
+							<PublishButton postDetailsId={post._id} {valueOfComment} {OutFocusComments} />
+						{/key}
+					{/if}
+				{/key}
 			</div>
 		</div>
 	</div>
