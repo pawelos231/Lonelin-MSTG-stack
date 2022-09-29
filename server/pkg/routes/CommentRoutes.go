@@ -20,7 +20,8 @@ func CommentHandlers(r *mux.Router, ctx context.Context, client *mongo.Client) *
 	r.Use(utils.CommonMiddleware)
 
 	//later create subrouter for this endopoint
-	r.HandleFunc("/GetAllCommentsOfGivenPosts", CommentsControllers.GetAllCommentsOfGivenPost(CollectionOfPosts, ctx)).Methods(http.MethodPost)
+	comments := r.PathPrefix("/comments").Subrouter()
+	comments.HandleFunc("/GetAllCommentsOfGivenPosts", CommentsControllers.GetAllCommentsOfGivenPost(CollectionOfPosts, ctx)).Methods(http.MethodPost)
 
 	c := r.PathPrefix("/comments").Subrouter()
 
