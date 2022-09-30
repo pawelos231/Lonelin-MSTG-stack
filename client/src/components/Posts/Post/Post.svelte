@@ -27,8 +27,9 @@
 	}
 
 	const removePostHandler: () => ResponseFromDelete | Promise<void> = async () => {
-		await fetch(`http://localhost:8080/DeletePost?q=${ParsedUserObject.token}`, {
+		await fetch(`http://localhost:8080/posts/DeletePost?q=${ParsedUserObject.token}`, {
 			method: POST,
+			credentials: 'include',
 			body: JSON.stringify(post._id)
 		})
 			.then((response) => response.json())

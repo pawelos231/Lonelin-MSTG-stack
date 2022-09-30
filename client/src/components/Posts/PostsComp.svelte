@@ -13,8 +13,15 @@
 		OpenModalPostForm = !OpenModalPostForm;
 	};
 
-	const { PostsFetched, loading, error, get } = PostsStoreHandler('http://localhost:8080/getdata');
+	const { PostsFetched, loading, error, get } = PostsStoreHandler(
+		'http://localhost:8080/posts/getdata'
+	);
 	let Posts: PostDetails[] | any = [];
+
+	let ParsedUserObject: UserInfo | any = {};
+	onMount(async function () {
+		ParsedUserObject = JSON.parse(localStorage.getItem('profile') || '{}');
+	});
 	onMount(async function () {
 		PostsFetched.subscribe(async (data: any) => {
 			if (Object.keys(data).length !== 0) {
@@ -24,10 +31,7 @@
 	});
 
 	//get user Profile info
-	let ParsedUserObject: UserInfo | any = {};
-	onMount(async function () {
-		ParsedUserObject = JSON.parse(localStorage.getItem('profile') || '{}');
-	});
+
 	let Title: string = '';
 	let Message: string = '';
 	let image: any;
@@ -56,13 +60,13 @@
 			image: image
 		};
 
-		await fetch(`http://localhost:8080/PostAPost?q=${ParsedUserObject.token}`, {
+		await fetch(`http://localhost:8080/posts/PostAPost?q=${ParsedUserObject.token}`, {
 			method: POST,
 			credentials: 'include',
 			body: JSON.stringify(obj)
 		});
 
-		const response: Response = await fetch('http://localhost:8080/getdata');
+		const response: Response = await fetch('http://localhost:8080/posts/getdata');
 		let data = await response.json();
 		PostsFetched.update((PrevState) => data);
 		PostsFetched.subscribe((value) => {

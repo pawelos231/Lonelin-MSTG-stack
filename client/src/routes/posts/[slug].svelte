@@ -14,7 +14,9 @@
 				props?: undefined | any;
 		  }
 	> {
-		const response: Response = await fetch(`http://localhost:8080/getSinglePost?q=${params.slug}`);
+		const response: Response = await fetch(
+			`http://localhost:8080/posts/getSinglePost?q=${params.slug}`
+		);
 		if (response.ok) {
 			return {
 				status: response.status,

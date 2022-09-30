@@ -14,7 +14,7 @@
 	let el: any;
 	const deleteAllPostsOfUser: () => Promise<void> = async () => {
 		showComp = true;
-		await fetch(`http://localhost:8080/DeleteAllPostsOfUser?q=${ProfileObj.token}`, {
+		await fetch(`http://localhost:8080/posts/DeleteAllPostsOfUser?q=${ProfileObj.token}`, {
 			method: 'POST',
 			credentials: 'include',
 			body: JSON.stringify(ProfileObj.email)
@@ -35,7 +35,7 @@
 		}
 
 		const FetchSpecificUserPosts: () => Promise<void> = async () => {
-			await fetch(`http://localhost:8080/FetchSpecificUserPosts?q=${ProfileObj.token}`, {
+			await fetch(`http://localhost:8080/posts/FetchSpecificUserPosts?q=${ProfileObj.token}`, {
 				method: 'POST',
 				credentials: 'include',
 				body: JSON.stringify(ProfileObj.email)
