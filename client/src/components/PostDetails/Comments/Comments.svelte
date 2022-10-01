@@ -29,7 +29,13 @@
 			body: JSON.stringify(post._id)
 		})
 			.then((res) => res.json())
-			.then((data) => (CommentDetails = data));
+			.then((data) => {
+				if (data == null) {
+					return;
+				} else {
+					CommentDetails = data;
+				}
+			});
 	});
 </script>
 

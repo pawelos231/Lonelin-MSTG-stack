@@ -15,12 +15,14 @@
 	};
 
 	let Temp: string = '';
+	
 	if (post.message.length > 150) {
 		for (let i = 0; i <= 150; i++) {
 			Temp += post.message[i];
 		}
 		Temp += '...';
 	}
+
 	interface ResponseFromDelete {
 		status: number;
 		text: string;

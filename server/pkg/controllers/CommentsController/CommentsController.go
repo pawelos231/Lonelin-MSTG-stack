@@ -55,7 +55,12 @@ func CommentOnPostByUser(col *mongo.Collection, ctx context.Context) http.Handle
 		result, insertErr := col.InsertOne(ctx, Comment)
 		utils.RegisterInsertErrors(result, insertErr)
 
-		json.NewEncoder(w).Encode("SIEMA")
+		//change it later
+		var Response = map[string]interface{}{}
+		Response["status"] = 1
+		Response["message"] = "Udało się opublikować komentarz !"
+
+		json.NewEncoder(w).Encode(Response)
 	}
 }
 
