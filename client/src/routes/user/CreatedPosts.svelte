@@ -57,29 +57,42 @@
 	<canvas bind:this={el} />
 	<h1 class=" absolute text-5xl  text-white top-24">Stworzone Posty</h1>
 	<div class="absolute text-white z-40 top-1/4 flex flex-wrap w-4/6 justify-center gap-2 ">
-		{#each Posts as post}
-			<Card hover outlined style="width:180px; height:30vh; overflow:hidden">
-				<div class="basis-1/4 bg-slate-300 h-full relative rounded-xl">
-					<a sveltekit:prefetch href="/posts/{post._id}">
-						<div class="h-2/4 overflow-hidden">
-							<img class=" top-0 left-0 h-full object-cover w-full" src={post.image} alt="" />
-						</div>
-						<h2 class=" text-left mb-3 pb-3 font-light text-sm">{post.title}</h2>
-						<p class="text-overline text-gray-700 text-xs">
-							Stworzone w: <span class="text-sm">{post.createdat}</span>
-						</p>
-					</a>
-				</div>
-			</Card>
-		{/each}
+		{#if Posts.length == 0}
+			<div class="mt-10">
+				<h4>Nic tu nie ma</h4>
+			</div>
+		{/if}
+		{#if Posts.length != 0}
+			{#each Posts as post}
+				<Card hover outlined style="width:180px; height:30vh; overflow:hidden">
+					<div class="basis-1/4 bg-slate-300 h-full relative rounded-xl">
+						<a sveltekit:prefetch href="/posts/{post._id}">
+							<div class="h-2/4 overflow-hidden">
+								<img
+									class=" top-0 left-0 h-full object-cover w-full"
+									src={post.image}
+									alt={post.title}
+								/>
+							</div>
+							<h2 class=" text-left mb-3 pb-3 font-light text-sm">{post.title}</h2>
+							<p class="text-overline text-gray-700 text-xs">
+								Stworzone w: <span class="text-sm">{post.createdat}</span>
+							</p>
+						</a>
+					</div>
+				</Card>
+			{/each}
+		{/if}
 	</div>
 </div>
-<button
-	on:click={deleteAllPostsOfUser}
-	class=" absolute top-40 left-96 z-30 text-red-500 cursor-pointer transition-colors duration-75 hover:text-red-800"
->
-	Usuń Wszystkie Swoje Posty
-</button>
+{#if Posts.length != 0}
+	<button
+		on:click={deleteAllPostsOfUser}
+		class=" absolute top-40 left-96 z-30 text-red-500 cursor-pointer transition-colors duration-75 hover:text-red-800"
+	>
+		Usuń Wszystkie Swoje Posty
+	</button>
+{/if}
 {#if messageFromDeleteAllPosts != undefined && showComp}
 	<MessageDeleteAllPostsOfUser message={messageFromDeleteAllPosts} bind:showComp />
 {/if}

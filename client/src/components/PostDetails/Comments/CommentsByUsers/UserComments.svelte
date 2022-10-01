@@ -5,7 +5,6 @@
 		CommentPostDetails
 	} from '../../../../interfaces/CommentsInterfaces/CommentPostinterface';
 	export let CommentDetails: AllDataComments[] & CommentPostDetails[] = [];
-	console.log(CommentDetails);
 </script>
 
 <div class="w-[40%]  mt-36 ml-6">
@@ -16,7 +15,7 @@
 	{/if}
 	{#if CommentDetails != null}
 		{#if CommentDetails.length == 0}
-			<div class="flex mt-10  justify-center text-xl absolute w-screen ml-0">
+			<div class="flex -mt-10  justify-center text-xl absolute w-screen ml-0">
 				<div class=" mr-5">Nie ma tu narazie zadnych komentarzy</div>
 			</div>
 		{/if}
