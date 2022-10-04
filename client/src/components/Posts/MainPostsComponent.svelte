@@ -7,6 +7,8 @@
 	import { ProgressCircular } from 'svelte-materialify';
 	import { PostsStoreHandler } from '../../store/PostStore';
 	import PostForm from '../Form/PostForm.svelte';
+	import CreatePostButtonMain from './Post/CreatePostButton/CreatePostButtonMain.svelte';
+	import LoginHandleButton from './Post/LoginHandleButtons/LoginHandleButton.svelte';
 	let OpenModalPostForm: boolean = false;
 
 	const OpenModalPostFormHandler = () => {
@@ -101,9 +103,8 @@
 				{onFileSelected}
 			/>
 		{/if}
-		<button class="absolute w-48 bg-slate-400 p-3 m-5 z-10" on:click={OpenModalPostFormHandler}
-			>Stwórz Post</button
-		>
+
+		<CreatePostButtonMain {OpenModalPostFormHandler} trimmedName={ParsedUserObject.name.trim()} />
 	{/if}
 
 	{#if Object.keys(ParsedUserObject).length === 0}
@@ -111,32 +112,20 @@
 	{/if}
 
 	{#key ParsedUserObject}
-		{#if Object.keys(ParsedUserObject).length === 0}
-			<div
-				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white"
-			>
-				<a href="/register"> Zaloguj się </a>
-			</div>
-		{/if}
-		{#if Object.keys(ParsedUserObject).length !== 0}
-			<div
-				class=" transition ease-in duration-200 cursor-pointer absolute top-20 right-20 bg-slate-300 p-4 rounded-md hover:bg-black hover:text-white z-20"
-				on:click={LogOut}
-			>
-				Wyloguj się
-			</div>
-		{/if}
+		<LoginHandleButton {ParsedUserObject} {LogOut} />
 	{/key}
 	<!---
 	<div class="text-white bg-slate-500 w-48 text-center p-2 rounded">Stwórz posta</div>
 	-->
 
-	<h1 class="text-5xl font-bold fa text-center bg-black p-9 text-white">Posty</h1>
+	<h1 class="text-5xl font-bold fa text-center bg-black mt-20 p-9 text-white">Posty</h1>
+
 	{#if $loading}
 		<div class="m-20" style="display: flex; justify-content: center">
 			<ProgressCircular indeterminate color="pink" size={80} />
 		</div>
 	{/if}
+
 	{#key Posts}
 		<div class="display flex gap-12 m-4 flex-wrap justify-center font-sans">
 			{#each Posts as post, index}

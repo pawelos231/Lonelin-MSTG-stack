@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PostsComp from '../components/Posts/PostsComp.svelte';
+	import MainPostComponent from '../components/Posts/MainPostsComponent.svelte';
 	import { onMount } from 'svelte';
 	onMount(async function () {
 		let respons: any = JSON.parse(localStorage.getItem('profile') || '{}');
@@ -17,6 +17,6 @@
 
 <div>
 	<div>
-		<PostsComp />
+		<MainPostComponent />
 	</div>
 </div>
