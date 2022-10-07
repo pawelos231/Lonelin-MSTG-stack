@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let ParsedUserObject: any;
-	export let LogOut: any;
+	export let LogOutUser: any;
 	let UserObjLen: any = Object.keys(ParsedUserObject).length;
 </script>
 
@@ -25,7 +25,7 @@
 		if (UserObjLen === 0) {
 			return null;
 		} else {
-			return LogOut();
+			return LogOutUser();
 		}
 	}}
 >
@@ -36,5 +36,4 @@
 	{#if UserObjLen !== 0}
 		Wyloguj się
 	{/if}
-  
 </div>

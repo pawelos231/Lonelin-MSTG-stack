@@ -1,8 +1,8 @@
 <script lang="ts">
-	export let HandleOnClick: any;
+	export let HandleSubmitPostForm: any;
 	export let Title: any;
 	export let Message: any;
-	export let onFileSelected: any;
+	export let HandleFileSelect: any;
 	export let OpenModalPostFormHandler: any;
 </script>
 
@@ -18,7 +18,7 @@ items-center z-20  "
 	</div>
 	<div class="bg-stone-800 w-[40%] h-[50%] h border-2 rounded-sm">
 		<form
-			on:submit={(e) => HandleOnClick(e)}
+			on:submit={(e) => HandleSubmitPostForm(e)}
 			enctype="multipart/form-data"
 			method="post"
 			class=" w-full h-full mb-10 flex flex-col  rounded-sm  p-4   gap-9  z-10  relative"
@@ -49,7 +49,7 @@ items-center z-20  "
 					type="file"
 					class=" w-50"
 					accept=".jpg, .jpeg, .png"
-					on:change={(e) => onFileSelected(e)}
+					on:change={(e) => HandleFileSelect(e)}
 				/>
 			</div>
 			<div

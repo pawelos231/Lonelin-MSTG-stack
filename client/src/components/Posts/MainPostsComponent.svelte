@@ -18,9 +18,84 @@
 	const { PostsFetched, loading, error, get } = PostsStoreHandler(
 		'http://localhost:8080/posts/getdata'
 	);
-	let Posts: PostDetails[] | any = [];
 
+	let Posts: PostDetails[] | any = [];
 	let ParsedUserObject: UserInfo | any = {};
+
+	//data about post from the user
+	let Title: string = '';
+	let Message: string = '';
+	let image: any;
+
+	//for better code reading
+	class HandlePostsForm {
+		[x: string]: any;
+		constructor(Title: string, Message: string, image: any) {
+			this.Title = Title;
+			this.Message = Message;
+			this.image = image;
+		}
+
+		//reset form values
+		ResetValuesOfForm(): void {
+			this.Title = '';
+			this.Message = '';
+			this.image = null;
+		}
+
+		//logout user
+		LogOut(): void {
+			localStorage.clear();
+			ParsedUserObject = {};
+		}
+
+		onFileSelected(e: any) {
+			let ImageFromSelect: any = e.target.files[0];
+			let reader: FileReader = new FileReader();
+			reader.readAsDataURL(ImageFromSelect);
+			reader.onload = (e: any) => {
+				image = e.target?.result;
+			};
+		}
+
+		//handler for submitting post forms
+		async HandleSubmitPostForm(e: any): Promise<void> {
+			e.preventDefault();
+			let today: Date = new Date();
+			let date: string = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+			const obj: PostDetails = {
+				title: Title,
+				createdat: date,
+				message: Message,
+				image: image
+			};
+
+			await fetch(`http://localhost:8080/posts/PostAPost?q=${ParsedUserObject.token}`, {
+				method: POST,
+				credentials: 'include',
+				body: JSON.stringify(obj)
+			});
+
+			const response: Response = await fetch('http://localhost:8080/posts/getdata');
+			let data = await response.json();
+			PostsFetched.update((PrevState) => data);
+			PostsFetched.subscribe((value) => {
+				Posts = value;
+			});
+
+			this.ResetValuesOfForm();
+			OpenModalPostForm = false;
+		}
+	}
+
+	const HandlePostFormObject = new HandlePostsForm(Title, Message, image);
+
+	const LogOutUser = () => HandlePostFormObject.LogOut();
+
+	const HandleSubmitPostForm = (e: any) => HandlePostFormObject.HandleSubmitPostForm(e);
+
+	const HandleFileSelect = () => (e: any) => HandlePostFormObject.onFileSelected(e);
+
 	onMount(async function () {
 		ParsedUserObject = JSON.parse(localStorage.getItem('profile') || '{}');
 	});
@@ -31,65 +106,6 @@
 			}
 		});
 	});
-
-	//get user Profile info
-
-	let Title: string = '';
-	let Message: string = '';
-	let image: any;
-
-	//dodac tagi, sprawić by kliknięcie na stwórz post to był taki popup,
-
-	const ResetValuesOfForm = (): void => {
-		Title = '';
-		Message = '';
-		image = null;
-	};
-
-	const LogOut = (): void => {
-		localStorage.clear();
-		ParsedUserObject = {};
-	};
-
-	const HandleOnClick = async (e: any): Promise<void> => {
-		e.preventDefault();
-		var today: any = new Date();
-		let date: string = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-		const obj: PostDetails = {
-			title: Title,
-			createdat: date,
-			message: Message,
-			image: image
-		};
-
-		await fetch(`http://localhost:8080/posts/PostAPost?q=${ParsedUserObject.token}`, {
-			method: POST,
-			credentials: 'include',
-			body: JSON.stringify(obj)
-		});
-
-		const response: Response = await fetch('http://localhost:8080/posts/getdata');
-		let data = await response.json();
-		PostsFetched.update((PrevState) => data);
-		PostsFetched.subscribe((value) => {
-			Posts = value;
-		});
-
-		ResetValuesOfForm();
-		OpenModalPostForm = false;
-	};
-
-	//select photo for your potst
-	const onFileSelected: (e: any) => void = (e: any) => {
-		//later change it, and add possibilty to add up to 10 images
-		let ImageFromSelect: any = e.target.files[0];
-		let reader: FileReader = new FileReader();
-		console.log(ImageFromSelect);
-		reader.readAsDataURL(ImageFromSelect);
-		reader.onload = (e: any) => {
-			image = e.target?.result;
-		};
-	};
 </script>
 
 <div class="mb-8 bg-black pt-15">
@@ -97,10 +113,10 @@
 		{#if OpenModalPostForm}
 			<PostForm
 				{OpenModalPostFormHandler}
-				{HandleOnClick}
+				{HandleSubmitPostForm}
 				bind:Title
 				bind:Message
-				{onFileSelected}
+				{HandleFileSelect}
 			/>
 		{/if}
 
@@ -112,7 +128,7 @@
 	{/if}
 
 	{#key ParsedUserObject}
-		<LoginHandleButton {ParsedUserObject} {LogOut} />
+		<LoginHandleButton {ParsedUserObject} {LogOutUser} />
 	{/key}
 	<!---
 	<div class="text-white bg-slate-500 w-48 text-center p-2 rounded">Stwórz posta</div>
