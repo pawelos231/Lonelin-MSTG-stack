@@ -4,45 +4,66 @@
 	import { POST } from '../../../constants/FetchDataMethods';
 	import { PostsFetched } from '../../../store/PostStore';
 	import EditPost from './EditPostModal/EditPost.svelte';
+
 	export let post: PostDetails | any;
 	export let ParsedUserObject: any;
 	export let index: any;
-
-	//modal Edit
-	let OpenModalEdit: boolean = false;
-	const OpenModalEditHandler: () => void = () => {
-		OpenModalEdit = !OpenModalEdit;
-	};
-
-	let Temp: string = '';
-	
-	if (post.message.length > 150) {
-		for (let i = 0; i <= 150; i++) {
-			Temp += post.message[i];
-		}
-		Temp += '...';
-	}
 
 	interface ResponseFromDelete {
 		status: number;
 		text: string;
 	}
 
-	const removePostHandler: () => ResponseFromDelete | Promise<void> = async () => {
-		await fetch(`http://localhost:8080/posts/DeletePost?q=${ParsedUserObject.token}`, {
-			method: POST,
-			credentials: 'include',
-			body: JSON.stringify(post._id)
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log(data);
+	let OpenModalEdit: boolean = false;
+	let Temp: string = '';
+
+	class ModifyUserPostsClass {
+		[x: string]: any;
+		constructor(OpenModalEdit: boolean, Temp: string) {
+			this.OpenModalEdit = OpenModalEdit;
+			this.Temp = Temp;
+		}
+
+		//Check if the post needs to be stripped
+		CheckIfPostDesIsToLong(): void {
+			if (post.message.length > 150) {
+				for (let i = 0; i <= 150; i++) {
+					Temp += post.message[i];
+				}
+				Temp += '...';
+			}
+		}
+
+		//Open modal to edit Post
+		OpenModalEditHandler(): void {
+			OpenModalEdit = !OpenModalEdit;
+		}
+
+		//remove given post Handler
+		async removePostHandler(): Promise<void | ResponseFromDelete> {
+			await fetch(`http://localhost:8080/posts/DeletePost?q=${ParsedUserObject.token}`, {
+				method: POST,
+				credentials: 'include',
+				body: JSON.stringify(post._id)
+			})
+				.then((response) => response.json())
+				.then((data) => {
+					console.log(data);
+				});
+			PostsFetched.update((data) => {
+				data.splice(index, 1);
+				return data;
 			});
-		PostsFetched.update((data) => {
-			data.splice(index, 1);
-			return data;
-		});
-	};
+		}
+	}
+
+	const ModifyUserPostsClassHandler = new ModifyUserPostsClass(OpenModalEdit, Temp);
+
+	const removePostHandlerFunction = () => ModifyUserPostsClassHandler.removePostHandler();
+
+	const OpenModalEditHandler = () => ModifyUserPostsClassHandler.OpenModalEditHandler();
+
+	ModifyUserPostsClassHandler.CheckIfPostDesIsToLong();
 </script>
 
 <Card hover outlined style="width:450px; height:70vh;">
@@ -79,7 +100,7 @@
 						Edytuj Posta
 					</p>
 					<p
-						on:click={removePostHandler}
+						on:click={removePostHandlerFunction}
 						class="text-red-600 hover:text-yellow-200 hover:bg-slate-500 p-2 rounded"
 					>
 						Usuń posta

@@ -24,7 +24,9 @@
 				<div class=" bg-stone-100 basis-[1.5px] mr-5" />
 				<div class="flex flex-col w-full">
 					<div class="flex  ">
-						<div class="basis-1/2  font-semibold">{username}</div>
+						<div class="basis-1/2  font-semibold">
+							<a href="/user">{username}</a>
+						</div>
 						<div class="text-xs text-stone-300">{createdat}</div>
 					</div>
 					<div class="mt-2 text-sm">{comment}</div>

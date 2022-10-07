@@ -28,8 +28,8 @@
 			method: POST,
 			body: JSON.stringify(post._id)
 		})
-			.then((res) => res.json())
-			.then((data) => {
+			.then((res: Response) => res.json())
+			.then((data: any) => {
 				if (data == null) {
 					return;
 				} else {
