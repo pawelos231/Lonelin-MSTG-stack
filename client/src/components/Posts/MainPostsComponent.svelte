@@ -58,11 +58,20 @@
 			};
 		}
 
+		GenerateDateString(): string {
+			let today: Date = new Date();
+			let date: string =
+				today.getFullYear() +
+				'-' +
+				(today.getMonth() + 1 <= 9 ? '0' + Number(today.getMonth() + 1) : today.getMonth() + 1) +
+				'-' +
+				(today.getDate() <= 9 ? '0' + Number(today.getDate()) : today.getDate());
+			return date;
+		}
 		//handler for submitting post forms
 		async HandleSubmitPostForm(e: any): Promise<void> {
 			e.preventDefault();
-			let today: Date = new Date();
-			let date: string = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+			let date: string = this.GenerateDateString();
 			const obj: PostDetails = {
 				title: Title,
 				createdat: date,
@@ -77,7 +86,7 @@
 			});
 
 			const response: Response = await fetch('http://localhost:8080/posts/getdata');
-			let data = await response.json();
+			let data: any = await response.json();
 			PostsFetched.update((PrevState) => data);
 			PostsFetched.subscribe((value) => {
 				Posts = value;

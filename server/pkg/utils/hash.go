@@ -13,6 +13,7 @@ type ErrorResponse struct {
 	Err string
 }
 
+
 //make it more usuable later on
 func HashValue(cost int, user *models.User) ([]byte, error) {
 	var password, err = bcrypt.GenerateFromPassword([]byte(user.Password), cost)
