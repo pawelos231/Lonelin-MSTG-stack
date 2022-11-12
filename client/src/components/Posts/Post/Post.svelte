@@ -4,20 +4,16 @@
 	import { POST } from '../../../constants/FetchDataMethods';
 	import { PostsFetched } from '../../../store/PostStore';
 	import EditPost from './EditPostModal/EditPost.svelte';
+	import type { modifyUserPostsInterface } from '../../../interfaces/PostInterfaces/PostsHandleInterfaces';
 
 	export let post: PostDetails | any;
 	export let ParsedUserObject: any;
 	export let index: any;
 
-	interface ResponseFromDelete {
-		status: number;
-		text: string;
-	}
-
 	let OpenModalEdit: boolean = false;
 	let Temp: string = '';
 
-	class ModifyUserPostsClass {
+	class ModifyUserPostsClass implements modifyUserPostsInterface {
 		[x: string]: any;
 		constructor(OpenModalEdit: boolean, Temp: string) {
 			this.OpenModalEdit = OpenModalEdit;
@@ -25,7 +21,7 @@
 		}
 
 		//Check if the post needs to be stripped
-		CheckIfPostDesIsToLong(): void {
+		CheckIfPostDesIsToLong() {
 			if (post.message.length > 150) {
 				for (let i = 0; i <= 150; i++) {
 					Temp += post.message[i];
@@ -35,12 +31,12 @@
 		}
 
 		//Open modal to edit Post
-		OpenModalEditHandler(): void {
+		OpenModalEditHandler() {
 			OpenModalEdit = !OpenModalEdit;
 		}
 
 		//remove given post Handler
-		async removePostHandler(): Promise<void | ResponseFromDelete> {
+		async removePostHandler() {
 			await fetch(`http://localhost:8080/posts/DeletePost?q=${ParsedUserObject.token}`, {
 				method: POST,
 				credentials: 'include',

@@ -9,8 +9,9 @@
 	import PostForm from '../Form/PostForm.svelte';
 	import CreatePostButtonMain from './Post/CreatePostButton/CreatePostButtonMain.svelte';
 	import LoginHandleButton from './Post/LoginHandleButtons/LoginHandleButton.svelte';
-	let OpenModalPostForm: boolean = false;
+	import type { HandlePostFormInterface } from '../../interfaces/PostInterfaces/PostsHandleInterfaces';
 
+	let OpenModalPostForm: boolean = false;
 	const OpenModalPostFormHandler = () => {
 		OpenModalPostForm = !OpenModalPostForm;
 	};
@@ -28,7 +29,7 @@
 	let image: any;
 
 	//for better code reading
-	class HandlePostsForm {
+	class HandlePostsForm implements HandlePostFormInterface {
 		[x: string]: any;
 		constructor(Title: string, Message: string, image: any) {
 			this.Title = Title;
@@ -37,14 +38,14 @@
 		}
 
 		//reset form values
-		ResetValuesOfForm(): void {
+		ResetValuesOfForm() {
 			this.Title = '';
 			this.Message = '';
 			this.image = null;
 		}
 
 		//logout user
-		LogOut(): void {
+		LogOut() {
 			localStorage.clear();
 			ParsedUserObject = {};
 		}
@@ -58,7 +59,7 @@
 			};
 		}
 
-		GenerateDateString(): string {
+		GenerateDateString() {
 			let today: Date = new Date();
 			let date: string =
 				today.getFullYear() +
@@ -69,7 +70,7 @@
 			return date;
 		}
 		//handler for submitting post forms
-		async HandleSubmitPostForm(e: any): Promise<void> {
+		async HandleSubmitPostForm(e: any) {
 			e.preventDefault();
 			let date: string = this.GenerateDateString();
 			const obj: PostDetails = {
@@ -87,8 +88,8 @@
 
 			const response: Response = await fetch('http://localhost:8080/posts/getdata');
 			let data: any = await response.json();
-			PostsFetched.update((PrevState) => data);
-			PostsFetched.subscribe((value) => {
+			PostsFetched.update((PrevState: any) => data);
+			PostsFetched.subscribe((value: any) => {
 				Posts = value;
 			});
 
@@ -97,12 +98,10 @@
 		}
 	}
 
-	const HandlePostFormObject = new HandlePostsForm(Title, Message, image);
+	const HandlePostFormObject: HandlePostsForm = new HandlePostsForm(Title, Message, image);
 
 	const LogOutUser = () => HandlePostFormObject.LogOut();
-
 	const HandleSubmitPostForm = (e: any) => HandlePostFormObject.HandleSubmitPostForm(e);
-
 	const HandleFileSelect = () => (e: any) => HandlePostFormObject.onFileSelected(e);
 
 	onMount(async function () {
